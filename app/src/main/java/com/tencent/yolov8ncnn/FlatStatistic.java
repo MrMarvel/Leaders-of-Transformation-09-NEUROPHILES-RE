@@ -1,78 +1,29 @@
 package com.tencent.yolov8ncnn;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-
-
+import java.util.List;
+import java.util.Vector;
 
 public class FlatStatistic {
-    public HashMap<Integer, Float> kitchen = new HashMap<Integer, Float>(){{
-        put(1, 0.f);
-        put(2, 0.f);
-        put(3, 0.f);
-        put(4, 0.f);
-        put(5, 0.f);
-        put(6, 0.f);
-        put(7, 0.f);
-        put(8, 0.f);
-        put(10, 0.f);
-        put(11, 0.f);
-        put(12, 0.f);
-        put(14, 0.f);
-        put(15, 0.f);
-        put(17, 0.f);
-        put(18, 0.f);
-        put(19, 0.f);
-    }};
 
-    public HashMap<Integer, Float> living = new HashMap<Integer, Float>(){{
-        put(1, 0.f);
-        put(2, 0.f);
-        put(4, 0.f);
-        put(5, 0.f);
-        put(6, 0.f);
-        put(7, 0.f);
-        put(8, 0.f);
-        put(10, 0.f);
-        put(11, 0.f);
-        put(12, 0.f);
-        put(14, 0.f);
-        put(15, 0.f);
-        put(17, 0.f);
-        put(18, 0.f);
-        put(19, 0.f);
-    }};
+    public static HashMap<Integer, Vector<Float>> init_map(List ignores){
+        HashMap<Integer, Vector<Float>> map = new HashMap<Integer, Vector<Float>>();
+        for (int i = 0; i < 21; i++){
+            if (!ignores.contains(i))
+                map.put(i, new Vector<Float>());
+        }
+        return map;
+    };
 
-    public HashMap<Integer, Float> hall = new HashMap<Integer, Float>(){{
-        put(1, 0.f);
-        put(2, 0.f);
-        put(4, 0.f);
-        put(5, 0.f);
-        put(6, 0.f);
-        put(7, 0.f);
-        put(11, 0.f);
-        put(12, 0.f);
-        put(14, 0.f);
-        put(15, 0.f);
-        put(17, 0.f);
-        put(18, 0.f);
-    }};
+    public static List<Integer> kitchen_map = Arrays.asList(0, 9, 13, 16);
+    public static List<Integer> living_map = Arrays.asList(0, 3, 9, 13, 16);
+    public static List<Integer> hall_map = Arrays.asList(0, 3, 8, 9, 10, 13, 16, 19);
+    public static List<Integer> sanitary_map = Arrays.asList(3, 8, 10, 16, 19);
 
-    public HashMap<Integer, Float> sanitary = new HashMap<Integer, Float>(){{
-        put(0, 0.f);
-        put(1, 0.f);
-        put(2, 0.f);
-        put(4, 0.f);
-        put(5, 0.f);
-        put(6, 0.f);
-        put(7, 0.f);
-        put(8, 0.f);
-        put(9, 0.f);
-        put(11, 0.f);
-        put(12, 0.f);
-        put(13, 0.f);
-        put(14, 0.f);
-        put(15, 0.f);
-        put(17, 0.f);
-        put(18, 0.f);
-    }};
+    public HashMap<Integer, Vector<Float>> kitchen = new HashMap<Integer, Vector<Float>>();
+    public HashMap<Integer, Vector<Float>> living = new HashMap<Integer, Vector<Float>>();
+    public HashMap<Integer, Vector<Float>> hall = new HashMap<Integer, Vector<Float>>();
+    public HashMap<Integer, Vector<Float>> sanitary = new HashMap<Integer, Vector<Float>>();
 }

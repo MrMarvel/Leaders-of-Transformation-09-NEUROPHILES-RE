@@ -1,17 +1,3 @@
-// Tencent is pleased to support the open source community by making ncnn available.
-//
-// Copyright (C) 2021 THL A29 Limited, a Tencent company. All rights reserved.
-//
-// Licensed under the BSD 3-Clause License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
-//
-// https://opensource.org/licenses/BSD-3-Clause
-//
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
-
 #include <android/asset_manager_jni.h>
 #include <android/native_window_jni.h>
 #include <android/native_window.h>
@@ -119,55 +105,6 @@ public:
 };
 
 
-//typedef struct _JNI_POSREC {
-//    jclass cls;
-//    jmethodID constructortorID;
-//    jfieldID labelID;
-//    jfieldID probID;
-//    jfieldID x0ID;
-//    jfieldID x1ID;
-//    jfieldID y0ID;
-//    jfieldID y1ID;
-//} JNI_POSREC;
-//
-//JNI_POSREC *jniPosRec = NULL;
-//
-//void LoadJniPosRec(JNIEnv *env) {
-//
-//    jniPosRec = new JNI_POSREC;
-//
-//    if (jniPosRec != NULL)
-//        return;
-//
-//    jniPosRec->cls = env->FindClass("com/tencent/yolov8ncnn/SimpleObjects");
-//
-//    if (jniPosRec->cls != NULL)
-//        printf("sucessfully created class");
-//
-//    jniPosRec->constructortorID = env->GetMethodID(jniPosRec->cls, "<init>", "()V");
-//    if (jniPosRec->constructortorID != NULL) {
-//        printf("sucessfully created ctorID");
-//    }
-//
-//    jniPosRec->labelID = env->GetFieldID(jniPosRec->cls, "label", "I");
-//    jniPosRec->probID = env->GetFieldID(jniPosRec->cls, "prob", "F");
-//    jniPosRec->x0ID = env->GetFieldID(jniPosRec->cls, "x0", "F");
-//    jniPosRec->x1ID = env->GetFieldID(jniPosRec->cls, "x1", "F");
-//    jniPosRec->y0ID = env->GetFieldID(jniPosRec->cls, "y0", "F");
-//    jniPosRec->y1ID = env->GetFieldID(jniPosRec->cls, "y1", "F");
-//}
-//
-//void FillSimpleObjects(JNIEnv *env, jobject jPosRec, SimpleObject *cPosRec) {
-//
-//    env->SetIntField(jPosRec, jniPosRec->labelID, (jint) cPosRec->label);
-//    env->SetFloatField(jPosRec, jniPosRec->probID, (jfloat) cPosRec->prob);
-//    env->SetFloatField(jPosRec, jniPosRec->x0ID, (jfloat) cPosRec->x0);
-//    env->SetFloatField(jPosRec, jniPosRec->x1ID, (jfloat) cPosRec->x1);
-//    env->SetFloatField(jPosRec, jniPosRec->y0ID, (jfloat) cPosRec->y0);
-//    env->SetFloatField(jPosRec, jniPosRec->y1ID, (jfloat) cPosRec->y1);
-//}
-
-
 std::map<int, std::vector<float> *> detected;
 int current_room_type = -1;
 enum class Rooms {
@@ -194,21 +131,11 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
         ncnn::MutexLockGuard g(lock);
         {
             if (g_yolo) {
-//            std::vector<SimpleObject> s_objects;
                 std::vector<Object> objects;
                 g_yolo->detect(rgb, objects);
                 g_yolo->draw(rgb, objects);
                 std::vector<Object>::iterator obj_iterator = objects.begin();
                 while (obj_iterator != objects.end()) {
-                    switch (current_room_type) {
-                        //TODO: MAKE threshold logic
-                        case (int) Rooms::Bathroom:
-                            break;
-                        case (int) Rooms::Bedroom:
-                            break;
-                        case (int) Rooms::Kitchen:
-                            break;
-                    }
                     if (detected.count(obj_iterator->label) > 0) {
                         // found
                         detected[obj_iterator->label][0].at(0) =
@@ -225,9 +152,8 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
                     }
                     obj_iterator++;
                 }
-
-//            all_frames.push_back(s_objects);
-            } else {
+            }
+            else {
                 draw_unsupported(rgb);
             }
         }
@@ -263,7 +189,6 @@ JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
 
 
 
-// public native boolean loadModel(AssetManager mgr, int modelid, int cpugpu);
 JNIEXPORT jboolean JNICALL
 Java_com_tencent_yolov8ncnn_Yolov8Ncnn_loadModel(JNIEnv *env, jobject thiz, jobject assetManager,
                                                  jint modelid, jint cpugpu) {
@@ -323,7 +248,6 @@ Java_com_tencent_yolov8ncnn_Yolov8Ncnn_loadModel(JNIEnv *env, jobject thiz, jobj
     return JNI_TRUE;
 }
 
-// public native boolean openCamera(int facing);
 JNIEXPORT jboolean
 
 JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_openCamera(JNIEnv *env, jobject thiz, jint facing) {
@@ -337,7 +261,6 @@ JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_openCamera(JNIEnv *env, jobject t
     return JNI_TRUE;
 }
 
-// public native boolean closeCamera();
 JNIEXPORT jboolean
 JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_closeCamera(JNIEnv *env, jobject thiz) {
     __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "closeCamera");
@@ -355,9 +278,7 @@ JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_changeState(JNIEnv *env, jobject 
 }
 
 
-// public native boolean setOutputWindow(Surface surface);
 JNIEXPORT jboolean
-
 JNICALL
 Java_com_tencent_yolov8ncnn_Yolov8Ncnn_setOutputWindow(JNIEnv *env, jobject thiz, jobject surface) {
     ANativeWindow *win = ANativeWindow_fromSurface(env, surface);
@@ -475,12 +396,6 @@ Java_com_tencent_yolov8ncnn_Yolov8Ncnn_getClasses(JNIEnv *env, jobject thiz) {
         jstring newString = (jstring) env->NewObject(stringClass, stringConstructorID, byteArray,
                                                      env->NewStringUTF("UTF-8"));
 
-
-
-//        jobject strValue = env->NewObject(stringClass, stringConstructorID, (jstring)i);
-//        if(strValue == NULL) {
-//            return NULL;
-//        }
         env->CallBooleanMethod(javaVector, addMethodID, newString);
     }
     env->DeleteLocalRef(vectorClass);

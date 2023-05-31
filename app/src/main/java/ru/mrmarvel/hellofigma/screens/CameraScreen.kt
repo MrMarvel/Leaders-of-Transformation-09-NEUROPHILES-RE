@@ -5,7 +5,6 @@ import android.os.Build
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Toast
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -274,7 +273,8 @@ fun CameraScreen(
 
                     viewModel.roomRealData = yolov8Ncnn?.data ?: HashMap<Int, Vector<Float>>()
                     Log.d("data", viewModel.roomRealData.toString())
-                    var flatStatistic = FlatStatistic()
+                    var flatStatistic =
+                        FlatStatistic() //TODO: Перенести в
 
                     // Записываем среднюю уверенность
                     // TODO: Добавить логику парного соответствия
@@ -283,21 +283,21 @@ fun CameraScreen(
                         when (roomType) {
                             RoomType.KITCHEN -> {
                                 if (key in flatStatistic.kitchen.keys && value[1] > 20)
-                                    flatStatistic.kitchen[key] = value[0]
+                                    flatStatistic.kitchen[key]?.add(value[0])
                             }
                             RoomType.LIVING -> {
                                 if (key in flatStatistic.living.keys && value[1] > 20)
-                                    flatStatistic.living[key] = value[0]
+                                    flatStatistic.living[key]?.add(value[0])
                             }
 
                             RoomType.HALL -> {
                                 if (key in flatStatistic.hall.keys && value[1] > 20)
-                                    flatStatistic.hall[key] = value[0]
+                                    flatStatistic.hall[key]?.add(value[0])
                             }
 
                             RoomType.SANITARY -> {
                                 if (key in flatStatistic.sanitary.keys && value[1] > 20)
-                                    flatStatistic.sanitary[key] = value[0]
+                                    flatStatistic.sanitary[key]?.add(value[0])
                             }
 
                         }
@@ -329,6 +329,7 @@ fun CameraScreen(
                             CheckLogic.compareAndResetClasses(flatStatistic.sanitary, wall_classes)
                         }
                     }
+
                     currentRoomType.value = null
                     Log.d("data", flatStatistic.kitchen.toString())
                 })

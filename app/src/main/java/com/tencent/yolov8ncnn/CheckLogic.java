@@ -17,15 +17,17 @@ public class CheckLogic {
         return max_; // position of the first largest found
     }
 
-    public static void compareAndResetClasses(HashMap<Integer, Float> room, int[] classes){
+    public static void compareAndResetClasses(HashMap<Integer, Vector<Float>> room, int[] classes){
         float[] probs = new float[classes.length];
         for(int i = 0; i < probs.length; i++){
-            probs[i] = room.get(classes[i]);
+            int len = room.get(classes[i]).size();
+            probs[i] = room.get(classes[i]).get(len);
          }
         int more_probable_class = getIndexOfMaximum(probs);
         for(int i = 0; i < classes.length; i++){
             if (i != more_probable_class){
-                room.put(classes[i], 0.0f);
+                int len = room.get(classes[i]).size();
+                room.get(classes[i]).set(len, 0.0f);
             }
         }
     }
