@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tencent.yolov8ncnn.RoomType
+import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.hellofigma.domain.repository.CustomCameraRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,12 +22,17 @@ class CameraScreenViewModel @Inject constructor(
     private val repo: CustomCameraRepo
 ):ViewModel() {
 
-    public val isStarted = mutableStateOf(false)
-    val currentRoomType: MutableState<RoomType?> = mutableStateOf(null)
+    public val isRecordingStarted = mutableStateOf(false)
     val currentFlatNumber = mutableStateOf("128")
+    val isFlatInputShown = mutableStateOf(false)
     val isFlatLocked = mutableStateOf(false)
+    val selectedRoomType: MutableState<RoomType?> = mutableStateOf(null)
+    val currentFlatProgress = mutableStateOf(.0f)
+    val isMOPSelected = mutableStateOf(false)
+
     var roomPlannedData = Vector<Int>()
     var roomRealData = HashMap<Int, Vector<Float>>()
+    var yolov8Ncnn: MutableState<Yolov8Ncnn?> = mutableStateOf(null)
 
     fun showCameraPreview(
         previewView: PreviewView,
