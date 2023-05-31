@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -34,23 +33,13 @@ import ru.mrmarvel.hellofigma.monitoringitembuildingsubitem.MonitoringItemBuildi
 import ru.mrmarvel.hellofigma.monthmonitoringlabel.MonthLabel
 import java.util.Calendar
 import kotlinx.coroutines.*
+import ru.mrmarvel.hellofigma.util.getRussianMonthName
 import java.util.Date
 
 
 val startingDate: Calendar = Calendar.Builder().setDate(2023, 5, 22).build()
 
 
-
-fun getRussianMonthName(monthNum: Int): String {
-    val monthsNames = listOf(
-        "Январь","Февраль","Март","Апрель",
-        "Май","Июнь","Июль","Август",
-        "Сентябрь", "Октябрь","Ноябрь","Декабрь"
-    )
-    if (monthNum < 1) throw IllegalArgumentException("Less than 1")
-    if (monthNum > 12) throw IllegalArgumentException("More than 12")
-    return monthsNames[monthNum+1]
-}
 @Composable
 fun MonitoringScreen(
     sharedViewModel: SharedViewModel = SharedViewModel(),

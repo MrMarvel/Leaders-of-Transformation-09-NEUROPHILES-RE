@@ -5,10 +5,8 @@ import android.os.Build
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.Toast
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,7 +16,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -61,9 +58,9 @@ import ru.mrmarvel.hellofigma.endroombutton.EndRoomButton
 import ru.mrmarvel.hellofigma.flatinputfield.FlatInputField
 import ru.mrmarvel.hellofigma.flatlabel.FlatLabel
 import ru.mrmarvel.hellofigma.flatlock.FlatLock
-import ru.mrmarvel.hellofigma.flatlock.IsLocked
 import ru.mrmarvel.hellofigma.flatprogress.FlatProgress
 import ru.mrmarvel.hellofigma.roomprogressbutton.RoomProgressButton
+import ru.mrmarvel.hellofigma.ui.TopLeftBar
 import ru.mrmarvel.hellofigma.util.findActivity
 import java.util.HashMap
 import java.util.Vector
@@ -72,7 +69,7 @@ import java.util.Vector
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
-    viewModel: CameraScreenViewModel = hiltViewModel(),
+    cameraViewModel: CameraScreenViewModel = hiltViewModel(),
     navigateToObserveResultScreen: () -> Unit = {}
 ) {
     Text("Тут должна была быть камера, но автор поленился")
@@ -112,9 +109,9 @@ fun CameraScreen(
     val screenWidth = configuration.screenWidthDp.dp
     var previewView: PreviewView
 
-    val currentFlatNumber = remember {viewModel.currentFlatNumber}
-    val currentRoomType = remember {viewModel.currentRoomType}
-    val isFlatLocked = remember {viewModel.isFlatLocked}
+    val currentFlatNumber = remember {cameraViewModel.currentFlatNumber}
+    val currentRoomType = remember {cameraViewModel.currentRoomType}
+    val isFlatLocked = remember {cameraViewModel.isFlatLocked}
     val isFlatChangeWindowShown = remember { mutableStateOf(false) }
     var yolov8Ncnn: Yolov8Ncnn? = Yolov8Ncnn();
     // val camerasCount = Camera.getNumberOfCameras()
@@ -145,10 +142,11 @@ fun CameraScreen(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    Box(Modifier
-                        // FORCE FILL
-                        .fillMaxWidth()
-                        .width(screenWidth * 0.97f)) {
+                    Box(
+                        Modifier
+                            // FORCE FILL
+                            .fillMaxWidth()
+                            .width(screenWidth * 0.97f)) {
                         AndroidView(
                             factory = {
                                 // previewView = PreviewView(it)
@@ -205,10 +203,10 @@ fun CameraScreen(
                 //     "Pressed",
                 //     Toast.LENGTH_SHORT
                 // ).show()
-                viewModel.isStarted.value = !viewModel.isStarted.value
+                cameraViewModel.isStarted.value = !cameraViewModel.isStarted.value
                 Log.d("model", (yolov8Ncnn == null).toString())
                 yolov8Ncnn?.changeState()
-                if (!viewModel.isStarted.value) {
+                if (!cameraViewModel.isStarted.value) {
                     navigateToObserveResultScreen()
                 }
             }) {
@@ -235,30 +233,8 @@ fun CameraScreen(
             .padding(8.dp),
             contentAlignment = Alignment.TopStart
         ) {
-            Row (
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                FlatLabel(Modifier, "Квартира ${currentFlatNumber.value}")
-                val lockClick = {
-                    isFlatLocked.value = !isFlatLocked.value
-                }
-                Crossfade(targetState = isFlatLocked.value) {
-                    when (it) {
-                        false -> FlatLock(
-                            Modifier.padding(start = 8.dp),
-                            onItemClick = lockClick, isLocked = IsLocked.NotLocked
-                        )
-
-                        true -> FlatLock(
-                            Modifier.padding(start = 8.dp),
-                            onItemClick = lockClick, isLocked = IsLocked.Locked
-                        )
-                    }
-                }
-                FlatProgress(Modifier.padding(start=8.dp),"0%")
-            }
+            TopLeftBar(cameraScreenViewModel = cameraViewModel)
         }
-        val currentRoomType = remember {viewModel.currentRoomType}
         AnimatedVisibility(visible = currentRoomType.value != null,
             enter = fadeIn(),
             exit = fadeOut()
@@ -270,15 +246,15 @@ fun CameraScreen(
             ) {
                 EndRoomButton(onItemClick = {
                     yolov8Ncnn?.changeState()
-                    var roomType = viewModel.currentRoomType.value
+                    var roomType = cameraViewModel.currentRoomType.value
 
-                    viewModel.roomRealData = yolov8Ncnn?.data ?: HashMap<Int, Vector<Float>>()
-                    Log.d("data", viewModel.roomRealData.toString())
+                    cameraViewModel.roomRealData = yolov8Ncnn?.data ?: HashMap<Int, Vector<Float>>()
+                    Log.d("data", cameraViewModel.roomRealData.toString())
                     var flatStatistic = FlatStatistic()
 
                     // Записываем среднюю уверенность
                     // TODO: Добавить логику парного соответствия
-                    for ((key, value) in viewModel.roomRealData) {
+                    for ((key, value) in cameraViewModel.roomRealData) {
                         // TODO: Сделать выбор комнаты
                         when (roomType) {
                             RoomType.KITCHEN -> {
@@ -336,7 +312,7 @@ fun CameraScreen(
         }
         val roomsNames = listOf("Санузел", "Коридор", "Жилая", "Кухня")
         AnimatedVisibility(
-            visible = remember { viewModel.currentRoomType}.value == null,
+            visible = remember { cameraViewModel.currentRoomType}.value == null,
             enter = expandVertically(expandFrom = Alignment.Top),
             exit = shrinkVertically(shrinkTowards = Alignment.Top),
         ) {
@@ -354,10 +330,10 @@ fun CameraScreen(
                 ) {
                     items(roomsNames.size) { i ->
                         RoomProgressButton(roomName = roomsNames[i], progressText = "${(i+1) * 25}%", onItemClick = {
-                            if (viewModel.isStarted.value) {
+                            if (cameraViewModel.isStarted.value) {
                                 yolov8Ncnn?.changeState()
                             }
-                            viewModel.currentRoomType.value = RoomType.toEnum(roomsNames[i])
+                            cameraViewModel.currentRoomType.value = RoomType.toEnum(roomsNames[i])
                         })
                     }
                 }
@@ -406,23 +382,7 @@ fun CameraButtonPreview() {
     CameraButton()
 }
 
-@Preview
-@Composable
-fun ChangeFlatButtonPreview() {
-    ChangeFlatButton()
-}
 
-@Preview
-@Composable
-fun FlatLabelPreview() {
-    FlatLabel(Modifier, "Квартира 128")
-}
-
-@Preview
-@Composable
-fun FlatLockPreview() {
-    FlatLock()
-}
 
 @Preview
 @Composable
