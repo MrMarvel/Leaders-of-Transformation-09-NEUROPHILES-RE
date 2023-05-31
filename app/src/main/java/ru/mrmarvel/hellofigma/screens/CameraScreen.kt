@@ -116,6 +116,7 @@ fun CameraScreen(
     val isFlatLocked = remember {viewModel.isFlatLocked}
     val isFlatChangeWindowShown = remember { mutableStateOf(false) }
     var yolov8Ncnn: Yolov8Ncnn? = Yolov8Ncnn();
+    var flatStatistic = FlatStatistic() //TODO: Перенести в
     // val camerasCount = Camera.getNumberOfCameras()
     // for (i in 0 until camerasCount) {
     //     var camera: Camera? = Camera.open(i)
@@ -179,6 +180,7 @@ fun CameraScreen(
                                         }
 
                                         override fun surfaceDestroyed(p0: SurfaceHolder) {
+                                            yolov8Ncnn?.changeState(false)
                                             yolov8Ncnn?.closeCamera()
                                             yolov8Ncnn = null
                                         }
@@ -206,7 +208,7 @@ fun CameraScreen(
                 // ).show()
                 viewModel.isStarted.value = !viewModel.isStarted.value
                 Log.d("model", (yolov8Ncnn == null).toString())
-                yolov8Ncnn?.changeState()
+                yolov8Ncnn?.changeState(viewModel.isStarted.value)
                 if (!viewModel.isStarted.value) {
                     navigateToObserveResultScreen()
                 }
@@ -268,13 +270,11 @@ fun CameraScreen(
                 contentAlignment = Alignment.BottomEnd
             ) {
                 EndRoomButton(onItemClick = {
-                    yolov8Ncnn?.changeState()
+                    yolov8Ncnn?.changeState(false)
                     var roomType = viewModel.currentRoomType.value
 
                     viewModel.roomRealData = yolov8Ncnn?.data ?: HashMap<Int, Vector<Float>>()
                     Log.d("data", viewModel.roomRealData.toString())
-                    var flatStatistic =
-                        FlatStatistic() //TODO: Перенести в
 
                     // Записываем среднюю уверенность
                     // TODO: Добавить логику парного соответствия
@@ -282,22 +282,30 @@ fun CameraScreen(
                         // TODO: Сделать выбор комнаты
                         when (roomType) {
                             RoomType.KITCHEN -> {
-                                if (key in flatStatistic.kitchen.keys && value[1] > 20)
-                                    flatStatistic.kitchen[key]?.add(value[0])
+                                if (key in flatStatistic.kitchen.keys && value[1] > 20){
+                                    var index = flatStatistic.kitchen[key]?.lastIndex ?: 0
+                                    flatStatistic.kitchen[key]?.set(index, value[0])
+                                }
                             }
                             RoomType.LIVING -> {
-                                if (key in flatStatistic.living.keys && value[1] > 20)
-                                    flatStatistic.living[key]?.add(value[0])
+                                if (key in flatStatistic.living.keys && value[1] > 20){
+                                    var index = flatStatistic.living[key]?.lastIndex ?: 0
+                                    flatStatistic.living[key]?.set(index, value[0])
+                                }
                             }
 
                             RoomType.HALL -> {
-                                if (key in flatStatistic.hall.keys && value[1] > 20)
-                                    flatStatistic.hall[key]?.add(value[0])
+                                if (key in flatStatistic.hall.keys && value[1] > 20){
+                                    var index = flatStatistic.hall[key]?.lastIndex ?: 0
+                                    flatStatistic.hall[key]?.set(index, value[0])
+                                }
                             }
 
                             RoomType.SANITARY -> {
-                                if (key in flatStatistic.sanitary.keys && value[1] > 20)
-                                    flatStatistic.sanitary[key]?.add(value[0])
+                                if (key in flatStatistic.sanitary.keys && value[1] > 20){
+                                    var index = flatStatistic.sanitary[key]?.lastIndex ?: 0
+                                    flatStatistic.sanitary[key]?.set(index, value[0])
+                                }
                             }
 
                         }
@@ -356,9 +364,10 @@ fun CameraScreen(
                     items(roomsNames.size) { i ->
                         RoomProgressButton(roomName = roomsNames[i], progressText = "${(i+1) * 25}%", onItemClick = {
                             if (viewModel.isStarted.value) {
-                                yolov8Ncnn?.changeState()
+                                yolov8Ncnn?.changeState(true)
                             }
                             viewModel.currentRoomType.value = RoomType.toEnum(roomsNames[i])
+                            flatStatistic.add_room(viewModel.currentRoomType.value)
                         })
                     }
                 }

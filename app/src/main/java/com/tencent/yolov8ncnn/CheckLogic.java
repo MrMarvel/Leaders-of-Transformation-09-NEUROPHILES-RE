@@ -20,13 +20,13 @@ public class CheckLogic {
     public static void compareAndResetClasses(HashMap<Integer, Vector<Float>> room, int[] classes){
         float[] probs = new float[classes.length];
         for(int i = 0; i < probs.length; i++){
-            int len = room.get(classes[i]).size();
+            int len = room.get(classes[i]).size() - 1;
             probs[i] = room.get(classes[i]).get(len);
          }
         int more_probable_class = getIndexOfMaximum(probs);
         for(int i = 0; i < classes.length; i++){
             if (i != more_probable_class){
-                int len = room.get(classes[i]).size();
+                int len = room.get(classes[i]).size() - 1;
                 room.get(classes[i]).set(len, 0.0f);
             }
         }

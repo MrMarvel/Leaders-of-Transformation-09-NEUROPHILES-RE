@@ -8,11 +8,32 @@ import java.util.Vector;
 
 public class FlatStatistic {
 
-    public static HashMap<Integer, Vector<Float>> init_map(List ignores){
-        HashMap<Integer, Vector<Float>> map = new HashMap<Integer, Vector<Float>>();
-        for (int i = 0; i < 21; i++){
-            if (!ignores.contains(i))
-                map.put(i, new Vector<Float>());
+    public HashMap<Integer, Vector<Float>> add_room(RoomType room){
+        List<Integer> ignores = null;
+        HashMap<Integer, Vector<Float>> map = null;
+        switch(room){
+            case KITCHEN:
+                ignores = kitchen_map;
+                map = kitchen;
+                break;
+            case LIVING:
+                ignores = living_map;
+                map = living;
+                break;
+            case HALL:
+                ignores = hall_map;
+                map = hall;
+                break;
+            case SANITARY:
+                ignores = sanitary_map;
+                map = sanitary;
+                break;
+        }
+        for (int i = 0; i <= 21; i++){
+            if (!ignores.contains(i)) {
+                if (!map.containsKey(i)) map.put(i, new Vector<Float>(){{add(0.0f);}});
+                else map.get(i).add(0.0f);
+            }
         }
         return map;
     };

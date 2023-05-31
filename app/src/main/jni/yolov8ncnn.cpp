@@ -271,9 +271,9 @@ JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_closeCamera(JNIEnv *env, jobject 
 }
 
 JNIEXPORT jboolean
-JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_changeState(JNIEnv *env, jobject thiz) {
+JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_changeState(JNIEnv *env, jobject thiz, jboolean state) {
     __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "ChangeState");
-    g_camera->state = !g_camera->state;
+    g_camera->state = (bool) state;
     return JNI_TRUE;
 }
 

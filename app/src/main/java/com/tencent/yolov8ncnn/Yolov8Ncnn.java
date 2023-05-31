@@ -14,7 +14,7 @@ public class Yolov8Ncnn
     public native boolean setOutputWindow(Surface surface);
     public native HashMap<Integer, Vector<Float>> getData();
     public native Vector<String> getClasses();
-    public native boolean changeState();
+    public native boolean changeState(boolean state);
     static {
         System.loadLibrary("yolov8ncnn");
     }
