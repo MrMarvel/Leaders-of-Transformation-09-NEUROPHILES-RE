@@ -211,11 +211,17 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
                     }
                     if (detected.count(obj_iterator->label) > 0) {
                         // found
-                        detected[obj_iterator->label]->push_back(obj_iterator->prob);
+                        detected[obj_iterator->label][0].at(0) =
+                                (detected[obj_iterator->label]->at(0)
+                                 * detected[obj_iterator->label]->at(1)
+                                 + obj_iterator->prob)
+                                / (detected[obj_iterator->label]->at(1) + 1);
+                        detected[obj_iterator->label]->at(1) ++;
                     } else {
                         // not found
                         detected[obj_iterator->label] = new std::vector<float>;
                         detected[obj_iterator->label]->push_back(obj_iterator->prob);
+                        detected[obj_iterator->label]->push_back(1.0);
                     }
                     obj_iterator++;
                 }

@@ -282,22 +282,22 @@ fun CameraScreen(
                         // TODO: Сделать выбор комнаты
                         when (roomType) {
                             RoomType.KITCHEN -> {
-                                if (key in flatStatistic.kitchen.keys && value.size > 20)
-                                    flatStatistic.kitchen[key] = value.sum() / value.size
+                                if (key in flatStatistic.kitchen.keys && value[1] > 20)
+                                    flatStatistic.kitchen[key] = value[0]
                             }
                             RoomType.LIVING -> {
-                                if (key in flatStatistic.living.keys && value.size > 20)
-                                    flatStatistic.living[key] = value.sum() / value.size
+                                if (key in flatStatistic.living.keys && value[1] > 20)
+                                    flatStatistic.living[key] = value[0]
                             }
 
                             RoomType.HALL -> {
-                                if (key in flatStatistic.hall.keys && value.size > 20)
-                                    flatStatistic.hall[key] = value.sum() / value.size
+                                if (key in flatStatistic.hall.keys && value[1] > 20)
+                                    flatStatistic.hall[key] = value[0]
                             }
 
                             RoomType.SANITARY -> {
-                                if (key in flatStatistic.sanitary.keys && value.size > 20)
-                                    flatStatistic.sanitary[key] = value.sum() / value.size
+                                if (key in flatStatistic.sanitary.keys && value[1] > 20)
+                                    flatStatistic.sanitary[key] = value[0]
                             }
 
                         }
