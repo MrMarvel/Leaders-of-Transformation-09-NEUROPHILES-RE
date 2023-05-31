@@ -1,14 +1,14 @@
 {
-  "name": "flat_number_button",
+  "name": "blue_text_line",
   "version": 32,
   "source-key": {
     "type": "figma",
     "file": "jzuwoTvIOeRK3P1G8NpduC",
-    "node": "392:300",
-    "version": "3581846850",
-    "component-id": "caac321a0a96f716e87ee7e6e0dd4c29d2fbea67"
+    "node": "404:238",
+    "version": "3581950447",
+    "component-id": "4ce169c0457a65406f5f455a6c936664a3a7d3da"
   },
-  "default": "FlatNumberButton",
+  "default": "BlueTextLine",
   "design": {
     "atoms": [
       {
@@ -18,22 +18,14 @@
       },
       {
         "type": "text",
-        "id": "FlatNumberLabel"
+        "id": "TextLabel"
       }
     ],
     "modes": {
-      "FlatNumberButton": {
+      "BlueTextLine": {
         "rules": [
           {
             "id": "top_level",
-            "padding": {
-              "left": "13.0",
-              "top": "1.0",
-              "right": "13.0",
-              "bottom": "1.0"
-            },
-            "border-radius": "20.0",
-            "tap-handler": "$onItemClick",
             "size-constraints": {
               "width-constraints": {
                 "sizing-mode": "shrink"
@@ -42,29 +34,25 @@
                 "sizing-mode": "shrink"
               }
             },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "cross-axis-align": "start",
             "children": [
-              "FlatNumberLabel"
+              "TextLabel"
             ],
             "item-spacing": "10.0",
-            "background-color": {
+            "clip-content": "false"
+          },
+          {
+            "id": "TextLabel",
+            "color": {
               "alpha": "1.0",
               "hue": "210.71428571428572",
               "saturation": "1.0",
               "value": "0.9882352941176471"
             },
-            "clip-content": "false"
-          },
-          {
-            "id": "FlatNumberLabel",
-            "color": {
-              "alpha": "0.9490196078431372",
-              "hue": "0.0",
-              "saturation": "0.0",
-              "value": "0.9882352941176471"
-            },
-            "text-content": "$roomNumber",
+            "text-content": "$text",
             "overflow": "visible",
-            "text-align-vertical": "center",
             "line-height": "1.2744140625",
             "typeface": "Abel"
           }
@@ -73,12 +61,7 @@
     }
   },
   "parameters": {
-    "onItemClick": {
-      "data-type": "void-callback",
-      "required": false,
-      "description": ""
-    },
-    "roomNumber": {
+    "text": {
       "data-type": "text",
       "required": false,
       "description": ""
@@ -86,13 +69,13 @@
   },
   "previews": [
     {
-      "design": "FlatNumberButton",
+      "design": "BlueTextLine",
       "size": {
-        "width": 48.0,
-        "height": 20.0
+        "width": 66.0,
+        "height": 18.0
       },
       "parameters": {
-        "roomNumber": "333"
+        "text": "Квартира "
       }
     }
   ],

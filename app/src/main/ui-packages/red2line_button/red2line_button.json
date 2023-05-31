@@ -1,14 +1,14 @@
 {
-  "name": "simple_room_button",
+  "name": "red2line_button",
   "version": 32,
   "source-key": {
     "type": "figma",
     "file": "jzuwoTvIOeRK3P1G8NpduC",
-    "node": "397:258",
-    "version": "3582249381",
-    "component-id": "42ef9fb7bdb97f9b5ef17c75f2d2d90a8b639194"
+    "node": "397:249",
+    "version": "3581981328",
+    "component-id": "1862f0b32e24c0dbc88c671b6bc018a75ab9ae85"
   },
-  "default": "SimpleRoomButton",
+  "default": "Red2LineButton",
   "design": {
     "atoms": [
       {
@@ -18,19 +18,23 @@
       },
       {
         "type": "text",
-        "id": "RoomNameLabel"
+        "id": "Line1Label"
+      },
+      {
+        "type": "text",
+        "id": "Line2Label"
       }
     ],
     "modes": {
-      "SimpleRoomButton": {
+      "Red2LineButton": {
         "rules": [
           {
             "id": "top_level",
             "padding": {
-              "left": "27.0",
-              "top": "11.0",
-              "right": "27.0",
-              "bottom": "11.0"
+              "left": "11.0",
+              "top": "2.0",
+              "right": "11.0",
+              "bottom": "2.0"
             },
             "border-radius": "20.0",
             "tap-handler": "$onItemClick",
@@ -42,27 +46,39 @@
                 "sizing-mode": "shrink"
               }
             },
-            "arrangement": "row",
             "children": [
-              "RoomNameLabel"
+              "Line1Label",
+              "Line2Label"
             ],
-            "item-spacing": "10.0",
             "background-color": {
               "alpha": "1.0",
-              "hue": "210.71428571428572",
-              "saturation": "1.0",
-              "value": "0.9882352941176471"
+              "hue": "0.0",
+              "saturation": "0.9747899159663865",
+              "value": "0.9333333333333333"
             }
           },
           {
-            "id": "RoomNameLabel",
+            "id": "Line1Label",
             "color": {
               "alpha": "1.0",
               "hue": "222.85714285714286",
               "saturation": "0.027888446215139345",
               "value": "0.984313725490196"
             },
-            "text-content": "$roomName",
+            "text-content": "$line1",
+            "overflow": "visible",
+            "line-height": "1.2744140625",
+            "typeface": "Abel"
+          },
+          {
+            "id": "Line2Label",
+            "color": {
+              "alpha": "1.0",
+              "hue": "222.85714285714286",
+              "saturation": "0.027888446215139345",
+              "value": "0.984313725490196"
+            },
+            "text-content": "$line2",
             "overflow": "visible",
             "line-height": "1.2744140625",
             "typeface": "Abel"
@@ -77,7 +93,12 @@
       "required": false,
       "description": ""
     },
-    "roomName": {
+    "line1": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "line2": {
       "data-type": "text",
       "required": false,
       "description": ""
@@ -85,13 +106,14 @@
   },
   "previews": [
     {
-      "design": "SimpleRoomButton",
+      "design": "Red2LineButton",
       "size": {
-        "width": 94.0,
+        "width": 100.0,
         "height": 40.0
       },
       "parameters": {
-        "roomName": "Кухня"
+        "line1": "Завершить",
+        "line2": "МОП"
       }
     }
   ],
