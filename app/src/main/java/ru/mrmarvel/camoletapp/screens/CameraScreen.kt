@@ -36,6 +36,7 @@ import ru.mrmarvel.camoletapp.camerabutton.Action
 import ru.mrmarvel.camoletapp.camerabutton.CameraButton
 import ru.mrmarvel.camoletapp.changeroombutton.ChangeRoomButton
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
+import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.flatinputfield.FlatInputField
 import ru.mrmarvel.camoletapp.simpleroombutton.SimpleRoomButton
 import ru.mrmarvel.camoletapp.ui.CameraFragment
@@ -46,6 +47,7 @@ import ru.mrmarvel.camoletapp.ui.TopLeftBar
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
+    sharedViewModel: SharedViewModel,
     cameraViewModel: CameraScreenViewModel = hiltViewModel(),
     navigateToObserveResultScreen: () -> Unit = {}
 ) {
@@ -53,7 +55,9 @@ fun CameraScreen(
     val permissions = mutableListOf(
         Manifest.permission.CAMERA,
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
     )
     permissions += if (Build.VERSION.SDK_INT <= 28){
         listOf(
@@ -93,7 +97,7 @@ fun CameraScreen(
         }
         AnimatedVisibility(visible = isRecordingStarted.value) {
             AnimatedVisibility(visible = isMOPSelected.value) {
-                MOPFragment(cameraViewModel = cameraViewModel, yolov8Ncnn = yolov8Ncnn)
+                MOPFragment(sharedViewModel = sharedViewModel, cameraViewModel = cameraViewModel, yolov8Ncnn = yolov8Ncnn)
             }
             AnimatedVisibility(visible = !isMOPSelected.value) {
 
@@ -109,7 +113,7 @@ fun CameraScreen(
                     )
                 }
                 AnimatedVisibility(visible = isFlatLocked.value) {
-                    RoomFragment(cameraViewModel = cameraViewModel, yolov8Ncnn = yolov8Ncnn)
+                    RoomFragment(sharedViewModel = sharedViewModel, cameraViewModel = cameraViewModel, yolov8Ncnn = yolov8Ncnn)
                 }
             }
         }
