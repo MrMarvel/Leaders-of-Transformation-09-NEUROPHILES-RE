@@ -130,7 +130,7 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 //    implementation 'org.apache.poi:poi:3.17'
-    implementation 'org.apache.poi:poi-ooxml:5.2.2'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
 
 
     // RETROFIT

@@ -1,5 +1,6 @@
 package ru.mrmarvel.camoletapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -54,6 +55,8 @@ fun ObserveResultScreen(
                         // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
                         var excelWriter: ExcelWriter = ExcelWriter()
                         excelWriter.readWorkbook(context)
+                        excelWriter.fillReport()
+                        Log.d("FILE SAVED", "12341234")
                     }
                 )
             }

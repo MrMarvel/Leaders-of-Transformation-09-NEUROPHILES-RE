@@ -56,6 +56,16 @@ public class ExcelWriter {
         }
     }
 
+    public void fillReport(){
+        XSSFSheet sheet = this.report.getSheet("ScoreMap");
+        for(int i = 0; i < 20; i++){
+            Row row = sheet.getRow(i);
+            Cell cell = row.getCell(4);
+            cell.setCellValue(73);
+        }
+        saveWorkbook("filledXLSX.xlsx");
+    }
+
     public void fillSheet(Percentage sheetName, int numFloor, int numSection, float percent) {
         numFloor++;
         // CHECK IF SHEET EXISTS
@@ -78,7 +88,7 @@ public class ExcelWriter {
 
     public void saveWorkbook(String filename) {
         try {
-            File filePath = new File(Environment.getExternalStorageDirectory() + "/" +filename);
+            File filePath = new File(Environment.getExternalStorageDirectory() + "/" + filename);
             //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(filePath);
             this.workbook.write(out);
