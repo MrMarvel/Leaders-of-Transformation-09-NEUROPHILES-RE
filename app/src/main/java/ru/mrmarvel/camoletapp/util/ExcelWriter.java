@@ -58,11 +58,11 @@ public class ExcelWriter {
 
     public void fillReport(){
         XSSFSheet sheet = this.report.getSheet("ScoreMap");
-        for(int i = 0; i < 20; i++){
-            Row row = sheet.getRow(i);
-            Cell cell = row.getCell(4);
-            cell.setCellValue(73);
-        }
+//        for(int i = 0; i < 20; i++){
+//            Row row = sheet.getRow(i);
+//            Cell cell = row.getCell(4);
+//            cell.setCellValue(73);
+//        }
         saveWorkbook("filledXLSX.xlsx");
     }
 
@@ -91,7 +91,7 @@ public class ExcelWriter {
             File filePath = new File(Environment.getExternalStorageDirectory() + "/" + filename);
             //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(filePath);
-            this.workbook.write(out);
+            this.report.write(out);
             out.close();
             System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
         } catch (Exception e) {
