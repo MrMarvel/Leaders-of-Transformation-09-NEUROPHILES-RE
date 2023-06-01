@@ -29,7 +29,7 @@ public class FlatStatistic {
                 map = sanitary;
                 break;
         }
-        for (int i = 0; i <= 21; i++){
+        for (int i = 0; i <= 22; i++){
             if (!ignores.contains(i)) {
                 if (!map.containsKey(i)) map.put(i, new Vector<Float>(){{add(0.0f);}});
                 else map.get(i).add(0.0f);

@@ -311,9 +311,11 @@ Java_com_tencent_yolov8ncnn_Yolov8Ncnn_setOutputWindow(JNIEnv *env, jobject thiz
 JNIEXPORT jobject  JNICALL
 Java_com_tencent_yolov8ncnn_Yolov8Ncnn_getData(JNIEnv *env, jobject thiz) {
 
-    detected[11]->at(detected[11]->size() - 1) += g_camera->prev_sockets_num;
-    g_camera->prev_sockets_num = 0;
-    g_camera->timer = ncnn::get_current_time();
+    if (detected.count(11) > 0){
+        detected[11]->at(detected[11]->size() - 1) += g_camera->prev_sockets_num;
+        g_camera->prev_sockets_num = 0;
+        g_camera->timer = ncnn::get_current_time();
+    }
 
     jclass hashMapClass = env->FindClass("java/util/HashMap");
     if (hashMapClass == NULL) {
