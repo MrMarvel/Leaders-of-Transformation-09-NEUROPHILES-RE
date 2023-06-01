@@ -93,7 +93,7 @@ fun CameraScreen(
         }
         AnimatedVisibility(visible = isRecordingStarted.value) {
             AnimatedVisibility(visible = isMOPSelected.value) {
-                MOPFragment(cameraScreenViewModel = cameraViewModel, yolov8Ncnn = yolov8Ncnn)
+                MOPFragment(cameraViewModel = cameraViewModel, yolov8Ncnn = yolov8Ncnn)
             }
             AnimatedVisibility(visible = !isMOPSelected.value) {
 

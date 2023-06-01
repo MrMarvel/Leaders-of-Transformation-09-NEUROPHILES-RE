@@ -7,7 +7,7 @@ import java.util.Vector;
 
 public class MOPStatistic {
 
-    public HashMap<Integer, Vector<Float>> add_room(){
+    public HashMap<Integer, Vector<Float>> addMOP(){
         for (int i = 0; i <= 21; i++){
             if (!mop_map.contains(i)) {
                 if (!mop.containsKey(i)) mop.put(i, new Vector<Float>(){{add(0.0f);}});

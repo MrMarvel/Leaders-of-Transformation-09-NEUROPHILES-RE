@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tencent.yolov8ncnn.FlatStatistic
+import com.tencent.yolov8ncnn.MOPStatistic
 import com.tencent.yolov8ncnn.RoomType
 import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.hellofigma.domain.repository.CustomCameraRepo
@@ -34,7 +35,8 @@ class CameraScreenViewModel @Inject constructor(
     var yolov8Ncnn: MutableState<Yolov8Ncnn?> = mutableStateOf(null)
     var roomRealData = HashMap<Int, Vector<Float>>()
     var flatStatistic = FlatStatistic()
-    var floorStatistic: MutableList<FlatStatistic> = mutableListOf()
+    var floorFlatStatistic: MutableList<FlatStatistic> = mutableListOf()
+    var floorMOPStatistic: MOPStatistic = MOPStatistic()
 
     fun showCameraPreview(
         previewView: PreviewView,
