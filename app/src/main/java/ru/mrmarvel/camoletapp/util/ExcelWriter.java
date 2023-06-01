@@ -1,22 +1,35 @@
 package ru.mrmarvel.camoletapp.util;
 
-import android.os.Environment;
+import static java.security.AccessController.getContext;
 
+import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
+
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class ExcelWriter {
 
-    public HSSFWorkbook workbook;
-//    private String nameTemplate = "Готовности по типу";
+    public XSSFWorkbook workbook;
+    public XSSFWorkbook report;
+
+    //    private String nameTemplate = "Готовности по типу";
     public HashMap<Percentage, String> PercentageEnumToString = new HashMap<Percentage, String>(){{
         put(Percentage.FLOOR_ROUGH, "floor_rough");
         put(Percentage.FLOOR_FINISH, "finish_floor");
@@ -28,14 +41,36 @@ public class ExcelWriter {
     }};
 
     public ExcelWriter() {
-        this.workbook = new HSSFWorkbook();
+        this.workbook = new XSSFWorkbook();
+    }
+
+    public void readWorkbook(Context context){
+        BufferedReader reader = null;
+        try{
+//            reader = new BufferedReader(
+//                    new InputStreamReader(context.getAssets().open("filename.txt")));
+            InputStream file = context.getAssets().open("reportTemplate.xlsx");
+            this.report = new XSSFWorkbook(file);
+        } catch (Exception e){
+            Log.d("READ ERROR", e.toString());
+        }
+    }
+
+    public void fillReport(){
+        XSSFSheet sheet = this.report.getSheet("ScoreMap");
+//        for(int i = 0; i < 20; i++){
+//            Row row = sheet.getRow(i);
+//            Cell cell = row.getCell(4);
+//            cell.setCellValue(73);
+//        }
+        saveWorkbook("filledXLSX.xlsx");
     }
 
     public void fillSheet(Percentage sheetName, int numFloor, int numSection, float percent) {
         numFloor++;
         // CHECK IF SHEET EXISTS
         String sheetN = PercentageEnumToString.get(sheetName);
-        HSSFSheet currentSheet = this.workbook.getSheet(sheetN);
+        XSSFSheet currentSheet = this.workbook.getSheet(sheetN);
         if (currentSheet == null) {
             currentSheet = this.workbook.createSheet(sheetN);
             Row sheetNameRow = currentSheet.createRow(0);
@@ -53,10 +88,10 @@ public class ExcelWriter {
 
     public void saveWorkbook(String filename) {
         try {
-            File filePath = new File(Environment.getExternalStorageDirectory() + "/" +filename);
+            File filePath = new File(Environment.getExternalStorageDirectory() + "/" + filename);
             //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(filePath);
-            this.workbook.write(out);
+            this.report.write(out);
             out.close();
             System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
         } catch (Exception e) {

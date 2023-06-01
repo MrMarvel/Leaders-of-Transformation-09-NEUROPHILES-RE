@@ -1,5 +1,6 @@
 package ru.mrmarvel.camoletapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.infofield.InfoField
+import ru.mrmarvel.camoletapp.util.ExcelWriter
 import ru.mrmarvel.camoletapp.videoframe.VideoFrame
 
 @Composable
@@ -51,6 +53,10 @@ fun ObserveResultScreen(
                     buttonText = "Скачать “шахматки”",
                     onItemClicked = {
                         // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
+                        var excelWriter: ExcelWriter = ExcelWriter()
+                        excelWriter.readWorkbook(context)
+                        excelWriter.fillReport()
+                        Log.d("FILE SAVED", "12341234")
                     }
                 )
             }
