@@ -28,14 +28,14 @@ import com.tencent.yolov8ncnn.CheckLogic
 import com.tencent.yolov8ncnn.RoomType
 import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
+import com.tencent.yolov8ncnn.FlatStatistic
 import ru.mrmarvel.camoletapp.endroombutton.EndRoomButton
 import ru.mrmarvel.camoletapp.simpleroombutton.SimpleRoomButton
-import com.tencent.yolov8ncnn.FlatStatistic
 
 fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn){
     val roomType = cameraViewModel.selectedRoomType.value
     cameraViewModel.roomRealData = yolov8Ncnn.data
-    Log.d("data", cameraViewModel.roomRealData.toString())
+    Log.d("MYDEBUG", cameraViewModel.roomRealData.toString())
 
     for ((key, value) in cameraViewModel.roomRealData) {
         when (roomType) {
@@ -69,32 +69,33 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
         }
     }
     // TODO: Проверить логику
-    val floor_classes: IntArray = intArrayOf(5, 6)
-    val ceiling_classes: IntArray = intArrayOf(1, 2)
-    val wall_classes: IntArray = intArrayOf(15, 17, 18)
-    Log.d("data", cameraViewModel.flatStatistic.kitchen.toString())
+    val floorClasses: IntArray = intArrayOf(5, 6, 20)
+    val ceilingClasses: IntArray = intArrayOf(1, 2, 21)
+    val wallClasses: IntArray = intArrayOf(15, 17, 18)
+    //Log.d("data", cameraViewModel.flatStatistic.kitchen.toString())
     when(roomType){
         RoomType.KITCHEN -> {
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, floor_classes)
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, ceiling_classes)
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, wall_classes)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, floorClasses)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, ceilingClasses)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, wallClasses)
         }
         RoomType.LIVING -> {
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, floor_classes)
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, ceiling_classes)
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, wall_classes)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, floorClasses)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, ceilingClasses)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, wallClasses)
         }
         RoomType.HALL -> {
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, floor_classes)
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, ceiling_classes)
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, wall_classes)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, floorClasses)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, ceilingClasses)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, wallClasses)
         }
         RoomType.SANITARY -> {
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, floor_classes)
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, ceiling_classes)
-            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, wall_classes)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, floorClasses)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, ceilingClasses)
+            CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, wallClasses)
         }
     }
+    Log.d("MYDEBUG", cameraViewModel.flatStatistic.toString())
     cameraViewModel.selectedRoomType.value = null
 }
 
@@ -104,11 +105,13 @@ fun RoomFragment(
     yolov8Ncnn: Yolov8Ncnn,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
-    val isFlatChangeWindowShown = remember { mutableStateOf(false) }
+    val isFlatChangeWindowShown = remember {mutableStateOf(false)}
     val currentFlatNumber = remember {cameraViewModel.currentFlatNumber}
     val currentRoomType = remember {cameraViewModel.selectedRoomType}
     val isFlatLocked = remember {cameraViewModel.isFlatLocked}
-    val isRoomStatSaved = remember {mutableStateOf(true) }
+    val isRoomStatSaved = remember {mutableStateOf(true)}
+    val isFloorStatSaved = remember {mutableStateOf(false)}
+    val isRoomEverChoose = remember {mutableStateOf(false)}
 
 
     AnimatedVisibility(visible = currentRoomType.value != null,
@@ -151,6 +154,7 @@ fun RoomFragment(
                         modifier=Modifier.padding(elementPadding),
                         roomName = roomsNames[i], onItemClick = {
                             isRoomStatSaved.value = false
+                            isRoomEverChoose.value = true
                             cameraViewModel.selectedRoomType.value = RoomType.toEnum(roomsNames[i])
                             cameraViewModel.flatStatistic.add_room(cameraViewModel.selectedRoomType.value)
                             yolov8Ncnn.changeState(true)
@@ -164,21 +168,39 @@ fun RoomFragment(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
                 cameraViewModel.flatStatistic = FlatStatistic()
-                Log.d("tag", "START")
+                Log.d("MYDEBUG", "START")
             } else if (event == Lifecycle.Event.ON_STOP) {
-                Log.d("tag", "STOP")
+                Log.d("MYDEBUG", "LIFESTOP")
+                // TODO Выделить в функцию
+                yolov8Ncnn.changeState(false)
+                if (!isRoomStatSaved.value) {
+                    isRoomStatSaved.value = true
+                    processRoomStatistic(cameraViewModel, yolov8Ncnn)
+                }
+                if (!isFloorStatSaved.value && isRoomEverChoose.value) {
+                    isFloorStatSaved.value = true
+                    cameraViewModel.floorFlatStatistic.add(cameraViewModel.flatStatistic)
+                }
+                Log.d("MYDEBUG", cameraViewModel.floorFlatStatistic.size.toString())
+
             }
         }
 
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
-            Log.d("tag", "STOP1")
+            Log.d("MYDEBUG", "DISPOSESTOP")
 
+            // TODO Выделить в функцию
             yolov8Ncnn.changeState(false)
-            if (!isRoomStatSaved.value)
+            if (!isRoomStatSaved.value) {
+                isRoomStatSaved.value = true
                 processRoomStatistic(cameraViewModel, yolov8Ncnn)
-            cameraViewModel.floorFlatStatistic.add(cameraViewModel.flatStatistic)
-
+            }
+            if (!isFloorStatSaved.value && isRoomEverChoose.value) {
+                isFloorStatSaved.value = true
+                cameraViewModel.floorFlatStatistic.add(cameraViewModel.flatStatistic)
+            }
+            Log.d("MYDEBUG", cameraViewModel.floorFlatStatistic.size.toString())
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }

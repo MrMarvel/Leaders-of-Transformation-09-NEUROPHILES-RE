@@ -17,6 +17,6 @@ public class MOPStatistic {
         return mop;
     };
 
-    public static List<Integer> mop_map = Arrays.asList(3, 8, 9, 13, 16);
+    public static List<Integer> mop_map = Arrays.asList(0, 3, 8, 9, 10, 13, 16, 19, 22);
     public HashMap<Integer, Vector<Float>> mop = new HashMap<Integer, Vector<Float>>();
 }

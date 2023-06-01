@@ -40,8 +40,8 @@ public class FlatStatistic {
 
     public static List<Integer> kitchen_map = Arrays.asList(0, 9, 13, 16);
     public static List<Integer> living_map = Arrays.asList(0, 3, 9, 13, 16);
-    public static List<Integer> hall_map = Arrays.asList(0, 3, 8, 9, 10, 13, 16, 19);
-    public static List<Integer> sanitary_map = Arrays.asList(3, 8, 10, 16, 19);
+    public static List<Integer> hall_map = Arrays.asList(0, 3, 8, 9, 10, 13, 16, 19, 22);
+    public static List<Integer> sanitary_map = Arrays.asList(3, 8, 10, 16, 19, 22);
 
     public HashMap<Integer, Vector<Float>> kitchen = new HashMap<Integer, Vector<Float>>();
     public HashMap<Integer, Vector<Float>> living = new HashMap<Integer, Vector<Float>>();

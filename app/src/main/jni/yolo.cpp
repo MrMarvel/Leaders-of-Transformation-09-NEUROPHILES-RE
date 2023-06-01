@@ -325,7 +325,7 @@ int Yolo::draw(cv::Mat& rgb, const std::vector<Object>& objects)
             "bath", "ceiling_finish", "ceiling_rough", "cupboard_kitchen", "door",
             "floor_finish","floor_rough", "no_door", "radiator", "sink", "slope",
             "socket", "switch", "toilet","trash", "wall_finish", "wall_no",
-            "wall_plaster", "wall_rough", "windowsill", "floor_plaster","ceiling_plaster"
+            "wall_plaster", "wall_rough", "windowsill", "floor_plaster","ceiling_plaster", "window"
     };
 
     static const unsigned char colors[19][3] = {
