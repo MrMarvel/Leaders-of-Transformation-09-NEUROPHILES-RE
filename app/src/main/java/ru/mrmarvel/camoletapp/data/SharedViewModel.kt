@@ -42,6 +42,8 @@ class SharedViewModel: ViewModel() {
     val selectedBuildingName = mutableStateOf("Корпус 2")
     val selectedSectionNumber = mutableStateOf("3")
     val selectedFloorNumber = mutableStateOf("1")
+    val observeRoomCount = mutableStateOf(0)
+    val observeMOPCount = mutableStateOf(0)
 
     val currentLocation: MutableState<Location?> = mutableStateOf(null)
 

@@ -18,6 +18,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.tencent.yolov8ncnn.CheckLogic
 import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
+import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.red2linebutton.Red2lineButton
 
 fun processMOPStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn){
@@ -47,11 +48,12 @@ fun processMOPStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolo
 }
 
 @Composable
-fun MOPFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn, modifier: Modifier = Modifier) {
+fun MOPFragment(sharedViewModel: SharedViewModel, cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn, modifier: Modifier = Modifier) {
     val yoloState = remember{ mutableStateOf(true)}
     val isMOPStatSaved = remember {mutableStateOf(false)}
 
     yolov8Ncnn.changeState(yoloState.value)
+    sharedViewModel.observeMOPCount.value += 1
     Box(modifier = modifier
         .fillMaxSize()
         .padding(32.dp),

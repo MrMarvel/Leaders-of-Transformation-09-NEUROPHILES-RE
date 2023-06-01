@@ -29,6 +29,7 @@ import com.tencent.yolov8ncnn.RoomType
 import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import com.tencent.yolov8ncnn.FlatStatistic
+import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.endroombutton.EndRoomButton
 import ru.mrmarvel.camoletapp.simpleroombutton.SimpleRoomButton
 
@@ -113,6 +114,7 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
 
 @Composable
 fun RoomFragment(
+    sharedViewModel: SharedViewModel,
     cameraViewModel: CameraScreenViewModel,
     yolov8Ncnn: Yolov8Ncnn,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
@@ -165,6 +167,7 @@ fun RoomFragment(
                     SimpleRoomButton(
                         modifier=Modifier.padding(elementPadding),
                         roomName = roomsNames[i], onItemClick = {
+                            sharedViewModel.observeRoomCount.value += 1
                             isRoomStatSaved.value = false
                             isRoomEverChoose.value = true
                             cameraViewModel.selectedRoomType.value = RoomType.toEnum(roomsNames[i])
