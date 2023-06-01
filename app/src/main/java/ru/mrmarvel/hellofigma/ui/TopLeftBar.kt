@@ -26,6 +26,7 @@ fun TopLeftBar(
     val currentFlatNumber = remember {cameraScreenViewModel.currentFlatNumber}
     val isFlatLocked = remember {cameraScreenViewModel.isFlatLocked}
     val isFlatInputShown = remember {cameraScreenViewModel.isFlatInputShown}
+    val selectedRoom = remember {cameraScreenViewModel.selectedRoomType}
 
     val elementModifier = Modifier.padding(horizontal = 4.dp)
     Row (
@@ -39,6 +40,7 @@ fun TopLeftBar(
         val lockClick = {
             isFlatLocked.value = !isFlatLocked.value
             isFlatInputShown.value = false
+            selectedRoom.value = null
         }
         Crossfade(targetState = isFlatLocked.value) {
             when (it) {
