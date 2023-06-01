@@ -46,15 +46,9 @@ fun CameraFragment(yolov8Ncnn: Yolov8Ncnn, modifier: Modifier = Modifier) {
                     .width(screenWidth * 0.97f)) {
                 AndroidView(
                     factory = {
-                        // previewView = PreviewView(it)
-                        // viewModel.showCameraPreview(previewView, lifecycleOwner)
-                        // previewView
                         SurfaceView(context).apply {
                             holder.addCallback(object : SurfaceHolder.Callback {
                                 override fun surfaceCreated(p0: SurfaceHolder) {
-                                    Log.d("model", "Loaded")
-                                    //yolov8Ncnn = Yolov8Ncnn()
-                                    Log.d("model", (false).toString())
                                     yolov8Ncnn.loadModel(
                                         context.findActivity().assets,
                                         0,

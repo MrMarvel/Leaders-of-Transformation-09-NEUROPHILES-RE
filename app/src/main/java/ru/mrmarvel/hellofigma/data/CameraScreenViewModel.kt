@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tencent.yolov8ncnn.FlatStatistic
 import com.tencent.yolov8ncnn.RoomType
 import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.hellofigma.domain.repository.CustomCameraRepo
@@ -30,9 +31,10 @@ class CameraScreenViewModel @Inject constructor(
     val currentFlatProgress = mutableStateOf(.0f)
     val isMOPSelected = mutableStateOf(false)
 
-    var roomPlannedData = Vector<Int>()
-    var roomRealData = HashMap<Int, Vector<Float>>()
     var yolov8Ncnn: MutableState<Yolov8Ncnn?> = mutableStateOf(null)
+    var roomRealData = HashMap<Int, Vector<Float>>()
+    var flatStatistic = FlatStatistic()
+    var floorStatistic: MutableList<FlatStatistic> = mutableListOf()
 
     fun showCameraPreview(
         previewView: PreviewView,

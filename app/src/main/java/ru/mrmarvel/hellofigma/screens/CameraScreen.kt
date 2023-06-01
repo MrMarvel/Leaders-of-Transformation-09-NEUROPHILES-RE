@@ -43,8 +43,6 @@ import ru.mrmarvel.hellofigma.ui.MOPFragment
 import ru.mrmarvel.hellofigma.ui.RoomFragment
 import ru.mrmarvel.hellofigma.ui.TopLeftBar
 
-//import  ru.mrmarvel.hellofigma.util.processStatistic
-
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
@@ -90,13 +88,12 @@ fun CameraScreen(
             .background(Color.Black)
             .fillMaxSize()
     ) {
-        //yolov8Ncnn?.changeState()
         if (permissionState.allPermissionsGranted){
             CameraFragment(yolov8Ncnn = yolov8Ncnn)
         }
         AnimatedVisibility(visible = isRecordingStarted.value) {
             AnimatedVisibility(visible = isMOPSelected.value) {
-                MOPFragment(cameraScreenViewModel = cameraViewModel)
+                MOPFragment(cameraScreenViewModel = cameraViewModel, yolov8Ncnn = yolov8Ncnn)
             }
             AnimatedVisibility(visible = !isMOPSelected.value) {
 
