@@ -17,15 +17,19 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.tencent.yolov8ncnn.CheckLogic
-import com.tencent.yolov8ncnn.FlatStatistic
 import com.tencent.yolov8ncnn.RoomType
 import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.hellofigma.changeflatbutton.ChangeFlatButton
@@ -34,11 +38,12 @@ import ru.mrmarvel.hellofigma.endroombutton.EndRoomButton
 import ru.mrmarvel.hellofigma.flatinputfield.FlatInputField
 import ru.mrmarvel.hellofigma.roomprogressbutton.RoomProgressButton
 import ru.mrmarvel.hellofigma.simpleroombutton.SimpleRoomButton
+import com.tencent.yolov8ncnn.FlatStatistic
 import java.util.HashMap
 import java.util.Vector
 
 @Composable
-fun RoomFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn) {
+fun RoomFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn, lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current) {
     val isFlatChangeWindowShown = remember { mutableStateOf(false) }
     val currentFlatNumber = remember {cameraViewModel.currentFlatNumber}
     val currentRoomType = remember {cameraViewModel.selectedRoomType}
@@ -55,35 +60,39 @@ fun RoomFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn)
             contentAlignment = Alignment.BottomEnd
         ) {
             EndRoomButton(onItemClick = {
-                yolov8Ncnn.changeState()
-                var roomType = cameraViewModel.selectedRoomType.value
+                yolov8Ncnn.changeState(false)
 
-                cameraViewModel.roomRealData =  yolov8Ncnn.data ?: HashMap<Int, Vector<Float>>()
+                val roomType = cameraViewModel.selectedRoomType.value
+                cameraViewModel.roomRealData = yolov8Ncnn.data
                 Log.d("data", cameraViewModel.roomRealData.toString())
-                var flatStatistic = FlatStatistic()
 
-                // Записываем среднюю уверенность
-                // TODO: Добавить логику парного соответствия
                 for ((key, value) in cameraViewModel.roomRealData) {
-                    // TODO: Сделать выбор комнаты
                     when (roomType) {
                         RoomType.KITCHEN -> {
-                            if (key in flatStatistic.kitchen.keys && value[1] > 20)
-                                flatStatistic.kitchen[key] = value[0]
+                            if (key in cameraViewModel.flatStatistic.kitchen.keys && value[1] > 20){
+                                val index = cameraViewModel.flatStatistic.kitchen[key]?.lastIndex ?: 0
+                                cameraViewModel.flatStatistic.kitchen[key]?.set(index, value[0])
+                            }
                         }
                         RoomType.LIVING -> {
-                            if (key in flatStatistic.living.keys && value[1] > 20)
-                                flatStatistic.living[key] = value[0]
+                            if (key in cameraViewModel.flatStatistic.living.keys && value[1] > 20){
+                                val index = cameraViewModel.flatStatistic.living[key]?.lastIndex ?: 0
+                                cameraViewModel.flatStatistic.living[key]?.set(index, value[0])
+                            }
                         }
 
                         RoomType.HALL -> {
-                            if (key in flatStatistic.hall.keys && value[1] > 20)
-                                flatStatistic.hall[key] = value[0]
+                            if (key in cameraViewModel.flatStatistic.hall.keys && value[1] > 20){
+                                val index = cameraViewModel.flatStatistic.hall[key]?.lastIndex ?: 0
+                                cameraViewModel.flatStatistic.hall[key]?.set(index, value[0])
+                            }
                         }
 
                         RoomType.SANITARY -> {
-                            if (key in flatStatistic.sanitary.keys && value[1] > 20)
-                                flatStatistic.sanitary[key] = value[0]
+                            if (key in cameraViewModel.flatStatistic.sanitary.keys && value[1] > 20){
+                                val index = cameraViewModel.flatStatistic.sanitary[key]?.lastIndex ?: 0
+                                cameraViewModel.flatStatistic.sanitary[key]?.set(index, value[0])
+                            }
                         }
 
                     }
@@ -92,37 +101,37 @@ fun RoomFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn)
                 val floor_classes: IntArray = intArrayOf(5, 6)
                 val ceiling_classes: IntArray = intArrayOf(1, 2)
                 val wall_classes: IntArray = intArrayOf(15, 17, 18)
-                Log.d("data", flatStatistic.kitchen.toString())
+                Log.d("data", cameraViewModel.flatStatistic.kitchen.toString())
                 when(roomType){
                     RoomType.KITCHEN -> {
-                        CheckLogic.compareAndResetClasses(flatStatistic.kitchen, floor_classes)
-                        CheckLogic.compareAndResetClasses(flatStatistic.kitchen, ceiling_classes)
-                        CheckLogic.compareAndResetClasses(flatStatistic.kitchen, wall_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, floor_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, ceiling_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, wall_classes)
                     }
                     RoomType.LIVING -> {
-                        CheckLogic.compareAndResetClasses(flatStatistic.living, floor_classes)
-                        CheckLogic.compareAndResetClasses(flatStatistic.living, ceiling_classes)
-                        CheckLogic.compareAndResetClasses(flatStatistic.living, wall_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, floor_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, ceiling_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, wall_classes)
                     }
                     RoomType.HALL -> {
-                        CheckLogic.compareAndResetClasses(flatStatistic.hall, floor_classes)
-                        CheckLogic.compareAndResetClasses(flatStatistic.hall, ceiling_classes)
-                        CheckLogic.compareAndResetClasses(flatStatistic.hall, wall_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, floor_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, ceiling_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, wall_classes)
                     }
                     RoomType.SANITARY -> {
-                        CheckLogic.compareAndResetClasses(flatStatistic.sanitary, floor_classes)
-                        CheckLogic.compareAndResetClasses(flatStatistic.sanitary, ceiling_classes)
-                        CheckLogic.compareAndResetClasses(flatStatistic.sanitary, wall_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, floor_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, ceiling_classes)
+                        CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, wall_classes)
                     }
                 }
                 currentRoomType.value = null
-                Log.d("data", flatStatistic.kitchen.toString())
+                Log.d("data", cameraViewModel.flatStatistic.kitchen.toString())
             })
         }
     }
     val roomsNames = listOf("Санузел", "Коридор", "Жилая", "Кухня")
     AnimatedVisibility(
-        visible = remember { cameraViewModel.selectedRoomType}.value == null,
+        visible = remember {cameraViewModel.selectedRoomType}.value == null,
         enter = expandVertically(expandFrom = Alignment.Top),
         exit = shrinkVertically(shrinkTowards = Alignment.Top),
     ) {
@@ -143,11 +152,33 @@ fun RoomFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn)
                     SimpleRoomButton(
                         modifier=Modifier.padding(elementPadding),
                         roomName = roomsNames[i], onItemClick = {
-                        cameraViewModel.selectedRoomType.value = RoomType.toEnum(roomsNames[i])
-                    })
+                            cameraViewModel.selectedRoomType.value = RoomType.toEnum(roomsNames[i])
+                            cameraViewModel.flatStatistic.add_room(cameraViewModel.selectedRoomType.value)
+                            yolov8Ncnn.changeState(true)
+                        })
                 }
             }
         }
     }
 
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                cameraViewModel.flatStatistic = FlatStatistic()
+                Log.d("tag", "START")
+            } else if (event == Lifecycle.Event.ON_STOP) {
+                Log.d("tag", "STOP")
+                //yolov8Ncnn.changeState(false)
+                //cameraViewModel.floorStatistic.add(cameraViewModel.flatStatistic)
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            Log.d("tag", "STOP1")
+            yolov8Ncnn.changeState(false)
+            cameraViewModel.floorStatistic.add(cameraViewModel.flatStatistic)
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 }
