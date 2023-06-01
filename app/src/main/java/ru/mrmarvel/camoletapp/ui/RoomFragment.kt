@@ -40,29 +40,41 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
     for ((key, value) in cameraViewModel.roomRealData) {
         when (roomType) {
             RoomType.KITCHEN -> {
-                if (key in cameraViewModel.flatStatistic.kitchen.keys && value[1] > 20){
+                if (key in cameraViewModel.flatStatistic.kitchen.keys){
                     val index = cameraViewModel.flatStatistic.kitchen[key]?.lastIndex ?: 0
-                    cameraViewModel.flatStatistic.kitchen[key]?.set(index, value[0])
+                    if (key == 11)
+                        cameraViewModel.flatStatistic.kitchen[key]?.set(index, value[1])
+                    else if (value[1] > 20)
+                        cameraViewModel.flatStatistic.kitchen[key]?.set(index, value[0])
                 }
             }
             RoomType.LIVING -> {
-                if (key in cameraViewModel.flatStatistic.living.keys && value[1] > 20){
+                if (key in cameraViewModel.flatStatistic.living.keys){
                     val index = cameraViewModel.flatStatistic.living[key]?.lastIndex ?: 0
-                    cameraViewModel.flatStatistic.living[key]?.set(index, value[0])
+                    if (key == 11)
+                        cameraViewModel.flatStatistic.living[key]?.set(index, value[1])
+                    else if (value[1] > 20)
+                        cameraViewModel.flatStatistic.living[key]?.set(index, value[0])
                 }
             }
 
             RoomType.HALL -> {
-                if (key in cameraViewModel.flatStatistic.hall.keys && value[1] > 20){
+                if (key in cameraViewModel.flatStatistic.hall.keys){
                     val index = cameraViewModel.flatStatistic.hall[key]?.lastIndex ?: 0
-                    cameraViewModel.flatStatistic.hall[key]?.set(index, value[0])
+                    if (key == 11)
+                        cameraViewModel.flatStatistic.hall[key]?.set(index, value[1])
+                    else if (value[1] > 20)
+                        cameraViewModel.flatStatistic.hall[key]?.set(index, value[0])
                 }
             }
 
             RoomType.SANITARY -> {
-                if (key in cameraViewModel.flatStatistic.sanitary.keys && value[1] > 20){
+                if (key in cameraViewModel.flatStatistic.sanitary.keys){
                     val index = cameraViewModel.flatStatistic.sanitary[key]?.lastIndex ?: 0
-                    cameraViewModel.flatStatistic.sanitary[key]?.set(index, value[0])
+                    if (key == 11)
+                        cameraViewModel.flatStatistic.sanitary[key]?.set(index, value[1])
+                    else if (value[1] > 20)
+                        cameraViewModel.flatStatistic.sanitary[key]?.set(index, value[0])
                 }
             }
 

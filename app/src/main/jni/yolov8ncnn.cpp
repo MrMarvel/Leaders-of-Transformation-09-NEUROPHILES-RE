@@ -126,7 +126,8 @@ bool in_vector(std::vector<int> vec, int item) {
 void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
     // nanodet
 
-    int threshold = 0.0;
+    prev_sockets_num = sockets_num == 0 ? prev_sockets_num : sockets_num;
+    sockets_num = 0;
     if (this->state){
         ncnn::MutexLockGuard g(lock);
         {
@@ -138,17 +139,34 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
                 while (obj_iterator != objects.end()) {
                     if (detected.count(obj_iterator->label) > 0) {
                         // found
-                        detected[obj_iterator->label][0].at(0) =
-                                (detected[obj_iterator->label]->at(0)
-                                 * detected[obj_iterator->label]->at(1)
-                                 + obj_iterator->prob)
-                                / (detected[obj_iterator->label]->at(1) + 1);
-                        detected[obj_iterator->label]->at(1) ++;
-                    } else {
+                        if (obj_iterator->label == 11) sockets_num ++;
+                        else {
+                            detected[obj_iterator->label]->at(0) =
+                                    (detected[obj_iterator->label]->at(0)
+                                     * detected[obj_iterator->label]->at(1)
+                                     + obj_iterator->prob)
+                                    / (detected[obj_iterator->label]->at(1) + 1);
+                            detected[obj_iterator->label]->at(1)++;
+                        }
+                    }
+                    else {
                         // not found
                         detected[obj_iterator->label] = new std::vector<float>;
-                        detected[obj_iterator->label]->push_back(obj_iterator->prob);
-                        detected[obj_iterator->label]->push_back(1.0);
+                        if (obj_iterator->label == 11){
+                            sockets_num ++;
+                            detected[obj_iterator->label]->push_back(obj_iterator->prob);
+                            detected[obj_iterator->label]->push_back(0.0);
+                            timer = ncnn::get_current_time();
+                        }
+                        else {
+                            detected[obj_iterator->label]->push_back(obj_iterator->prob);
+                            detected[obj_iterator->label]->push_back(1.0);
+                        }
+                    }
+                    if (detected.count(11) > 0 && ncnn::get_current_time() - timer > this->socket_elapsed){
+                        detected[11]->at(1) += sockets_num;
+                        sockets_num = 0;
+                        timer = ncnn::get_current_time();
                     }
                     obj_iterator++;
                 }
@@ -292,6 +310,11 @@ Java_com_tencent_yolov8ncnn_Yolov8Ncnn_setOutputWindow(JNIEnv *env, jobject thiz
 
 JNIEXPORT jobject  JNICALL
 Java_com_tencent_yolov8ncnn_Yolov8Ncnn_getData(JNIEnv *env, jobject thiz) {
+
+    detected[11]->at(detected[11]->size() - 1) += g_camera->prev_sockets_num;
+    g_camera->prev_sockets_num = 0;
+    g_camera->timer = ncnn::get_current_time();
+
     jclass hashMapClass = env->FindClass("java/util/HashMap");
     if (hashMapClass == NULL) {
         return NULL;                // alternatively, throw exception (recipeNo019)

@@ -26,9 +26,12 @@ fun processMOPStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolo
     Log.d("MYDEBUG", cameraViewModel.roomRealData.toString())
 
     for ((key, value) in cameraViewModel.roomRealData) {
-        if (key in cameraViewModel.floorMOPStatistic.mop.keys && value[1] > 20){
+        if (key in cameraViewModel.floorMOPStatistic.mop.keys){
             val index = cameraViewModel.floorMOPStatistic.mop[key]?.lastIndex ?: 0
-            cameraViewModel.floorMOPStatistic.mop[key]?.set(index, value[0])
+            if (key == 11)
+                cameraViewModel.floorMOPStatistic.mop[key]?.set(index, value[1])
+            else if (value[1] > 20)
+                cameraViewModel.floorMOPStatistic.mop[key]?.set(index, value[0])
         }
     }
     // TODO: Проверить логику

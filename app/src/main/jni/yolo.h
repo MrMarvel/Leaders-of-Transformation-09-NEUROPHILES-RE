@@ -12,15 +12,6 @@ struct Object
     float prob;
 };
 
-struct SimpleObject{
-    int label;
-    float prob;
-    float x0;
-    float y0;
-    float x1;
-    float y1;
-};
-
 struct GridAndStride
 {
     int grid0;
