@@ -18,6 +18,7 @@ import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.infofield.InfoField
+import ru.mrmarvel.camoletapp.util.ExcelWriter
 import ru.mrmarvel.camoletapp.videoframe.VideoFrame
 
 @Composable
@@ -51,6 +52,8 @@ fun ObserveResultScreen(
                     buttonText = "Скачать “шахматки”",
                     onItemClicked = {
                         // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
+                        var excelWriter: ExcelWriter = ExcelWriter()
+                        excelWriter.readWorkbook(context)
                     }
                 )
             }

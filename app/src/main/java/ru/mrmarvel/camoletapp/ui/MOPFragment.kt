@@ -88,11 +88,11 @@ fun MOPFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn, 
             // WARNING:
             // ЭТО НЕ НУЖНО ПОТОМУ ЧТО СОХРАНЕНИЕ БУДЕТ В ЛЮБОМ СЛУЧАЕ
             // ПРИ ВЫХОДЕ ИЛИ НАЖАТИИ КНОПКИ. ВРОДЕ НЕ ВЫЛЕТАЕТ
-//            yoloState.value = false
-//            if (!isMOPStatSaved.value) {
-//                isMOPStatSaved.value = true
-//                processMOPStatistic(cameraViewModel, yolov8Ncnn)
-//            }
+            yoloState.value = false
+            if (!isMOPStatSaved.value) {
+                isMOPStatSaved.value = true
+                processMOPStatistic(cameraViewModel, yolov8Ncnn)
+            }
 
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
