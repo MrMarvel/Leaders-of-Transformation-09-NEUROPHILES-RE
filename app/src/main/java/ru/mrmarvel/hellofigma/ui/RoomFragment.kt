@@ -99,7 +99,11 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
 }
 
 @Composable
-fun RoomFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn, lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current) {
+fun RoomFragment(
+    cameraViewModel: CameraScreenViewModel,
+    yolov8Ncnn: Yolov8Ncnn,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+) {
     val isFlatChangeWindowShown = remember { mutableStateOf(false) }
     val currentFlatNumber = remember {cameraViewModel.currentFlatNumber}
     val currentRoomType = remember {cameraViewModel.selectedRoomType}

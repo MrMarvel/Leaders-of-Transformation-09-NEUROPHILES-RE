@@ -5,13 +5,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.tencent.yolov8ncnn.CheckLogic
+import com.tencent.yolov8ncnn.FlatStatistic
 import com.tencent.yolov8ncnn.RoomType
 import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.hellofigma.data.CameraScreenViewModel
@@ -42,12 +47,12 @@ fun processMOPStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolo
 
 @Composable
 fun MOPFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn, modifier: Modifier = Modifier) {
+    val state = remember{ mutableStateOf(true)}
+    yolov8Ncnn.changeState(state.value)
     Box(modifier = modifier
         .fillMaxSize()
         .padding(32.dp),
     ) {
-        var state = remember{ mutableStateOf(true)}
-        yolov8Ncnn.changeState(state.value)
         Red2lineButton(Modifier.align(Alignment.BottomCenter), "Завершить", "МОП",
             onItemClick = {
                 state.value = false
@@ -55,6 +60,24 @@ fun MOPFragment(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn, 
                 processMOPStatistic(cameraViewModel, yolov8Ncnn)
             }
         )
+    }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                cameraViewModel.flatStatistic = FlatStatistic()
+                Log.d("MYDEBUG", "START")
+            } else if (event == Lifecycle.Event.ON_STOP) {
+                Log.d("MYDEBUG", "LIFESTOP") // SCREEN CHANGES (BACK)
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            Log.d("MYDEBUG", "DISPOSESTOP")
+            state.value = false
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 }
 
