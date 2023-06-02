@@ -88,7 +88,7 @@ public class ExcelWriter {
 
     public void saveWorkbook(String filename) {
         try {
-            File filePath = new File(Environment.getExternalStorageDirectory() + "/" + filename);
+            File filePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
             //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(filePath);
             this.report.write(out);

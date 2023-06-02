@@ -57,7 +57,7 @@ fun ObserveResultScreen(
                     buttonText = "Скачать скор-карту",
                     onItemClicked = {
                         StatCounter.calculatePercent(context, sharedViewModel, cameraScreenViewModel)
-                        Toast.makeText(context, "Скачать скор-карту!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Таблица скачана в папку загрузок!", Toast.LENGTH_SHORT).show()
                     }
                 )
                 Blue1lineButton(elementModifier,
