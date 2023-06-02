@@ -95,8 +95,8 @@ public class StatCounter {
 
             float countWall = flatCounter.get(17) + flatCounter.get(15) + flatCounter.get(18);
             result[3] = flatCounter.get(18) / countWall;
-            result[4] = flatCounter.get(15) / countWall;
-            result[5] = flatCounter.get(17) / countWall;
+            result[4] = flatCounter.get(17) / countWall;
+            result[5] = flatCounter.get(15) / countWall;
 
             float countCeiling = flatCounter.get(2) + flatCounter.get(1) + flatCounter.get(21);
             result[6] = flatCounter.get(2) / countCeiling;
@@ -137,8 +137,8 @@ public class StatCounter {
 
             float mWallCounter = mopCounter.get(18) + mopCounter.get(17) + mopCounter.get(15);
             result[21] = mopCounter.get(18) / mWallCounter;
-            result[22] = mopCounter.get(15) / mWallCounter;
-            result[23] = mopCounter.get(17) / mWallCounter;
+            result[22] = mopCounter.get(17) / mWallCounter;
+            result[23] = mopCounter.get(15) / mWallCounter;
 
             float mCeilingCounter = mopCounter.get(2) + mopCounter.get(1) + mopCounter.get(21);
             result[24] = mopCounter.get(2) / mCeilingCounter;
