@@ -48,7 +48,7 @@ import ru.mrmarvel.camoletapp.ui.TopLeftBar
 @Composable
 fun CameraScreen(
     sharedViewModel: SharedViewModel,
-    cameraViewModel: CameraScreenViewModel = hiltViewModel(),
+    cameraViewModel: CameraScreenViewModel,
     navigateToObserveResultScreen: () -> Unit = {}
 ) {
     val context = LocalContext.current

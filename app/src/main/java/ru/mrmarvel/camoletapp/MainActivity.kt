@@ -84,6 +84,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("camera_screen") {
                             CameraScreen(
+                                cameraViewModel = cameraScreenViewModel,
                                 sharedViewModel = sharedViewModel,
                                 navigateToObserveResultScreen = {
                                     navController.navigate("observe_result_screen") {

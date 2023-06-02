@@ -59,7 +59,7 @@ public class ExcelWriter {
     public void fillReport(float[] data){
         XSSFSheet sheet = this.report.getSheet("ScoreMap");
         for(int i = 0; i < data.length; i++){
-            Row row = sheet.getRow(i + 2);
+            Row row = sheet.getRow(i + 1);
             Cell cell = row.getCell(4);
             cell.setCellValue(data[i]);
         }

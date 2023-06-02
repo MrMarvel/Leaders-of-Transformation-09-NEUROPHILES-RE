@@ -32,13 +32,9 @@ public class StatCounter {
         for(FlatStatistic item: floorFlatStatic){
             // iterate through objects
             // kitchen
-            for(HashMap<Integer, Vector<Float>> map: item.allMaps){
-                int cnt = 0;
+            int cnt = 0;
+            for(HashMap<Integer, Vector<Float>> map: item.getAllMaps()){
                 for(Map.Entry<Integer, Vector<Float>> entry : map.entrySet()){
-                    if (cnt == 3) {
-                        bathConter+=map.get(0).size(); // count amount of bathrooms
-                    }
-                    cnt++;
                     int id = entry.getKey();
                     if(flatCounter.get(id) == null){
 //                        if(IntStream.of(countableClasses).anyMatch(x -> x == id)){
@@ -59,6 +55,10 @@ public class StatCounter {
                         flatCounter.put(id, flatCounter.get(id) + entry.getValue().stream().reduce(0.0f, Float::sum));
                     }
                 }
+                if (cnt == 3) {
+                    bathConter+= map.size() > 0 ? map.get(0).size() : 0;
+                }
+                cnt++;
             }
         }
 
@@ -84,46 +84,60 @@ public class StatCounter {
                 mopCounter.put(id, mopCounter.get(id) + entry.getValue().stream().reduce(0.0f, Float::sum));
             }
         }
-        float[] result = new float[26];
-        float countFloor = flatCounter.get(5) + flatCounter.get(20) + flatCounter.get(6);
-        result[0] = flatCounter.get(6) / countFloor;
-        result[1] = flatCounter.get(20) / countFloor;
-        result[2] = flatCounter.get(5) / countFloor;
+        float[] result = new float[27];
+        for (int i = 0; i < 27; i++) result[i] = 0;
 
-        float countWall = flatCounter.get(17) + flatCounter.get(15) + flatCounter.get(18);
-        result[3] = flatCounter.get(18) / countWall;
-        result[4] = flatCounter.get(15) / countWall;
-        result[5] = flatCounter.get(17) / countWall;
+        if (flatCounter.size() > 0) {
+            float countFloor = flatCounter.get(5) + flatCounter.get(20) + flatCounter.get(6);
+            result[0] = flatCounter.get(6) / countFloor;
+            result[1] = flatCounter.get(20) / countFloor;
+            result[2] = flatCounter.get(5) / countFloor;
 
-        float countCeiling = flatCounter.get(2) + flatCounter.get(1) + flatCounter.get(21);
-        result[6] = flatCounter.get(2) / countCeiling;
-        result[7] = flatCounter.get(21) / countCeiling;
-        result[8] = flatCounter.get(1) / countCeiling;
+            float countWall = flatCounter.get(17) + flatCounter.get(15) + flatCounter.get(18);
+            result[3] = flatCounter.get(18) / countWall;
+            result[4] = flatCounter.get(15) / countWall;
+            result[5] = flatCounter.get(17) / countWall;
 
-        result[9] = flatCounter.get(4) / ((float) roomCounter.getValue());
-        result[10] = flatCounter.get(14) + mopCounter.get(14) > 0 ? 1.0f : 0.0f;
-        result[11] = flatCounter.get(11) + mopCounter.get(11);
-        result[13] = flatCounter.get(8) / flatCounter.get(22);
-        result[14] = flatCounter.get(3);
-        result[15] = flatCounter.get(13) / bathConter;
-        result[16] = flatCounter.get(0) / bathConter;
-        result[17] = flatCounter.get(9) / bathConter;
+            float countCeiling = flatCounter.get(2) + flatCounter.get(1) + flatCounter.get(21);
+            result[6] = flatCounter.get(2) / countCeiling;
+            result[7] = flatCounter.get(21) / countCeiling;
+            result[8] = flatCounter.get(1) / countCeiling;
+            result[9] = flatCounter.get(4) / ((float) roomCounter.getValue());
 
 
-        float mFloorCounter = mopCounter.get(6) + mopCounter.get(5) + mopCounter.get(20);
-        result[18] = mopCounter.get(6) / mFloorCounter;
-        result[19] = mopCounter.get(20) / mFloorCounter;
-        result[20] = mopCounter.get(5) / mFloorCounter;
+            result[13] = flatCounter.get(8) / flatCounter.get(22);
+            result[14] = flatCounter.get(3);
+            if (bathConter > 0) {
+                result[15] = flatCounter.get(13) / bathConter;
+                result[16] = flatCounter.get(0) / bathConter;
+                result[17] = flatCounter.get(9) / bathConter;
+            }
+        }
 
-        float mWallCounter = mopCounter.get(18) + mopCounter.get(17) + mopCounter.get(15);
-        result[21] = mopCounter.get(18) / mWallCounter;
-        result[22] = mopCounter.get(15) / mWallCounter;
-        result[23] = mopCounter.get(17) / mWallCounter;
+        result[10] = ((flatCounter.size() > 0 ? flatCounter.get(14) : 0)
+                     + (mopCounter.size() > 0 ? mopCounter.get(14) : 0))
+                     > 0 ? 1.0f : 0.0f;
+        result[11] = (flatCounter.size() > 0 ? flatCounter.get(11) : 0)
+                     + (mopCounter.size() > 0 ? mopCounter.get(11) : 0);
 
-        float mCeilingCounter = mopCounter.get(2) + mopCounter.get(1) + mopCounter.get(21);
-        result[24] = mopCounter.get(2) / mCeilingCounter;
-        result[25] = mopCounter.get(21) / mCeilingCounter;
-        result[26] = mopCounter.get(1) / mCeilingCounter;
+
+
+        if (mopCounter.size() > 0) {
+            float mFloorCounter = mopCounter.get(6) + mopCounter.get(5) + mopCounter.get(20);
+            result[18] = mopCounter.get(6) / mFloorCounter;
+            result[19] = mopCounter.get(20) / mFloorCounter;
+            result[20] = mopCounter.get(5) / mFloorCounter;
+
+            float mWallCounter = mopCounter.get(18) + mopCounter.get(17) + mopCounter.get(15);
+            result[21] = mopCounter.get(18) / mWallCounter;
+            result[22] = mopCounter.get(15) / mWallCounter;
+            result[23] = mopCounter.get(17) / mWallCounter;
+
+            float mCeilingCounter = mopCounter.get(2) + mopCounter.get(1) + mopCounter.get(21);
+            result[24] = mopCounter.get(2) / mCeilingCounter;
+            result[25] = mopCounter.get(21) / mCeilingCounter;
+            result[26] = mopCounter.get(1) / mCeilingCounter;
+        }
 
         ExcelWriter excelWriter = new ExcelWriter();
         excelWriter.readWorkbook(context);
