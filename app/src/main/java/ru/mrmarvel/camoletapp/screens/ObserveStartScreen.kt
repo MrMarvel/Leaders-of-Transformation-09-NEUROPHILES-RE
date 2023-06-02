@@ -100,13 +100,16 @@ fun ObserveStartScreen(
         Surface(
             Modifier.padding(scaffoldPadding),
         ) {
-            ObserveStartMain()
+            ObserveStartMain(sharedViewModel = sharedViewModel, navigateBack = navigateBack)
         }
     }
 }
 
 @Composable
-fun ObserveStartMain(sharedViewModel: SharedViewModel = SharedViewModel()) {
+fun ObserveStartMain(
+    sharedViewModel: SharedViewModel = SharedViewModel(),
+    navigateBack: () -> Unit = {}
+) {
     Surface(Modifier.fillMaxWidth()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -116,7 +119,9 @@ fun ObserveStartMain(sharedViewModel: SharedViewModel = SharedViewModel()) {
             BackButton(
                 Modifier
                     .align(Alignment.Start)
-                    .padding(bottom = 8.dp))
+                    .padding(bottom = 8.dp),
+                onItemClick = navigateBack
+            )
             VideoFrame()
             val elementModifier = Modifier.padding(vertical = 3.dp)
             Column(Modifier.padding(top = 24.dp)) {
