@@ -34,12 +34,14 @@ import ru.mrmarvel.camoletapp.R
 import ru.mrmarvel.camoletapp.backbutton.BackButton
 import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
+import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.videoframe.VideoFrame
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ObserveStartScreen(
+    cameraScreenViewModel: CameraScreenViewModel,
     sharedViewModel: SharedViewModel,
     navigateToCameraScreen: () -> Unit = {},
     navigateBack: () -> Unit = {}
@@ -86,6 +88,7 @@ fun ObserveStartScreen(
                 Blue1lineButton(Modifier,
                     buttonText = "Начать",
                     onItemClicked = {
+                        cameraScreenViewModel.isFlatLocked.value = false
                         // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
                         navigateToCameraScreen()
                     }

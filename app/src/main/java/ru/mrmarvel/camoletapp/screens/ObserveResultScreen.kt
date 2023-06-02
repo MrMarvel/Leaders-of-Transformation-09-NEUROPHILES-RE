@@ -2,9 +2,7 @@ package ru.mrmarvel.camoletapp.screens
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -21,7 +19,6 @@ import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.infofield.InfoField
-import ru.mrmarvel.camoletapp.util.ExcelWriter
 import ru.mrmarvel.camoletapp.util.StatCounter
 import ru.mrmarvel.camoletapp.videoframe.VideoFrame
 
@@ -56,6 +53,7 @@ fun ObserveResultScreen(
                 Blue1lineButton(elementModifier,
                     buttonText = "Скачать скор-карту",
                     onItemClicked = {
+                        Log.d("MYDEBUG", "СЧИТАЕМ")
                         StatCounter.calculatePercent(context, sharedViewModel, cameraScreenViewModel)
                         Toast.makeText(context, "Таблица скачана в папку загрузок!", Toast.LENGTH_SHORT).show()
                     }

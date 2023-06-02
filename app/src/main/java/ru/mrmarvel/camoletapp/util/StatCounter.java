@@ -104,9 +104,16 @@ public class StatCounter {
             result[8] = flatCounter.get(1) / countCeiling;
             result[9] = flatCounter.get(4) / ((float) roomCounter.getValue());
 
+            if (flatCounter.containsKey(19) && flatCounter.containsKey(22)) {
+                result[12] = flatCounter.get(19)  / flatCounter.get(22);
+            }
 
-            result[13] = flatCounter.get(8) / flatCounter.get(22);
-            result[14] = flatCounter.get(3);
+            if (flatCounter.containsKey(8) && flatCounter.containsKey(22)) {
+                result[13] = flatCounter.get(8) / flatCounter.get(22);
+            }
+            if (flatCounter.containsKey(3)) {
+                result[14] = flatCounter.get(3);
+            }
             if (bathConter > 0) {
                 result[15] = flatCounter.get(13) / bathConter;
                 result[16] = flatCounter.get(0) / bathConter;

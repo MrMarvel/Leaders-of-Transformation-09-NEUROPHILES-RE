@@ -88,11 +88,13 @@ public class ExcelWriter {
 
     public void saveWorkbook(String filename) {
         try {
+            Log.d("MYDEBUG", "SAVING");
             File filePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
             //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(filePath);
             this.report.write(out);
             out.close();
+            Log.d("MYDEBUG", "SAVED");
             System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
         } catch (Exception e) {
             e.printStackTrace();
