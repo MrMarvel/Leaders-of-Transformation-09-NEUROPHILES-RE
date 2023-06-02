@@ -1,6 +1,7 @@
 package ru.mrmarvel.camoletapp.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,14 +43,20 @@ fun ObserveResultScreen(
             )
         },
         bottomBar = {
-            Row(
+            val elementModifier = Modifier.padding(vertical = 8.dp)
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp, top = 4.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Blue1lineButton(Modifier,
+                Blue1lineButton(elementModifier,
+                    buttonText = "Скачать скор-карту",
+                    onItemClicked = {
+                        Toast.makeText(context, "Скачать скор-карту!", Toast.LENGTH_SHORT).show()
+                    }
+                )
+                Blue1lineButton(elementModifier,
                     buttonText = "Скачать “шахматки”",
                     onItemClicked = {
                         // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
@@ -57,6 +64,7 @@ fun ObserveResultScreen(
                         excelWriter.readWorkbook(context)
                         excelWriter.fillReport()
                         Log.d("FILE SAVED", "12341234")
+                        Toast.makeText(context, "Скачать “шахматки”!", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -65,7 +73,7 @@ fun ObserveResultScreen(
         Surface(
             Modifier.padding(scaffoldPadding),
         ) {
-            ObserveResultMain(sharedViewModel, navigateToMonitoringScreen)
+            ObserveResultMain(sharedViewModel, navigateToMonitoringScreen = navigateToMonitoringScreen)
         }
     }
 }
