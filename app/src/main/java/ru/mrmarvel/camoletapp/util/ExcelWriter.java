@@ -56,14 +56,14 @@ public class ExcelWriter {
         }
     }
 
-    public void fillReport(){
+    public void fillReport(float[] data){
         XSSFSheet sheet = this.report.getSheet("ScoreMap");
-//        for(int i = 0; i < 20; i++){
-//            Row row = sheet.getRow(i);
-//            Cell cell = row.getCell(4);
-//            cell.setCellValue(73);
-//        }
-        saveWorkbook("filledXLSX.xlsx");
+        for(int i = 0; i < data.length; i++){
+            Row row = sheet.getRow(i);
+            Cell cell = row.getCell(4);
+            cell.setCellValue(data[i]);
+        }
+        saveWorkbook("report.xlsx");
     }
 
     public void fillSheet(Percentage sheetName, int numFloor, int numSection, float percent) {

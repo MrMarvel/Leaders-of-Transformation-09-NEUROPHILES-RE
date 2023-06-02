@@ -48,4 +48,12 @@ public class FlatStatistic {
     public HashMap<Integer, Vector<Float>> living = new HashMap<Integer, Vector<Float>>();
     public HashMap<Integer, Vector<Float>> hall = new HashMap<Integer, Vector<Float>>();
     public HashMap<Integer, Vector<Float>> sanitary = new HashMap<Integer, Vector<Float>>();
+
+    public Vector<HashMap<Integer, Vector<Float>>> allMaps = new Vector<HashMap<Integer, Vector<Float>>>(){{
+        add(kitchen);
+        add(living);
+        add(hall);
+        add(sanitary);
+    }};
+
 }
