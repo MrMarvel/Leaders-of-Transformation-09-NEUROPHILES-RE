@@ -45,7 +45,7 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
                     val index = cameraViewModel.flatStatistic.kitchen[key]?.lastIndex ?: 0
                     if (key == 11)
                         cameraViewModel.flatStatistic.kitchen[key]?.set(index, value[1])
-                    else if (value[1] > 20)
+                    else
                         cameraViewModel.flatStatistic.kitchen[key]?.set(index, value[0])
                 }
             }
@@ -54,7 +54,7 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
                     val index = cameraViewModel.flatStatistic.living[key]?.lastIndex ?: 0
                     if (key == 11)
                         cameraViewModel.flatStatistic.living[key]?.set(index, value[1])
-                    else if (value[1] > 20)
+                    else
                         cameraViewModel.flatStatistic.living[key]?.set(index, value[0])
                 }
             }
@@ -64,7 +64,7 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
                     val index = cameraViewModel.flatStatistic.hall[key]?.lastIndex ?: 0
                     if (key == 11)
                         cameraViewModel.flatStatistic.hall[key]?.set(index, value[1])
-                    else if (value[1] > 20)
+                    else
                         cameraViewModel.flatStatistic.hall[key]?.set(index, value[0])
                 }
             }
@@ -85,32 +85,61 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
     val floorClasses: IntArray = intArrayOf(5, 6, 20)
     val ceilingClasses: IntArray = intArrayOf(1, 2, 21)
     val wallClasses: IntArray = intArrayOf(15, 17, 18)
-    //Log.d("data", cameraViewModel.flatStatistic.kitchen.toString())
     when(roomType){
         RoomType.KITCHEN -> {
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, floorClasses)
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, ceilingClasses)
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.kitchen, wallClasses)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.kitchen.toString())
+            CheckLogic.isWallFinish(cameraViewModel.flatStatistic.kitchen)
+            CheckLogic.isFloorFinish(cameraViewModel.flatStatistic.kitchen)
+            CheckLogic.setSwitchFromSocket(cameraViewModel.flatStatistic.kitchen, 5)
+            CheckLogic.roundProbs(cameraViewModel.flatStatistic.kitchen, 0.4f)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.kitchen.toString())
         }
         RoomType.LIVING -> {
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, floorClasses)
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, ceilingClasses)
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.living, wallClasses)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.living.toString())
+            CheckLogic.isWallFinish(cameraViewModel.flatStatistic.living)
+            CheckLogic.isFloorFinish(cameraViewModel.flatStatistic.living)
+            CheckLogic.setSwitchFromSocket(cameraViewModel.flatStatistic.living, 5)
+            CheckLogic.roundProbs(cameraViewModel.flatStatistic.living, 0.4f)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.living.toString())
         }
         RoomType.HALL -> {
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, floorClasses)
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, ceilingClasses)
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.hall, wallClasses)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.hall.toString())
+            CheckLogic.isWallFinish(cameraViewModel.flatStatistic.hall)
+            CheckLogic.isFloorFinish(cameraViewModel.flatStatistic.hall)
+            CheckLogic.setSwitchFromSocket(cameraViewModel.flatStatistic.hall, 2)
+            CheckLogic.roundProbs(cameraViewModel.flatStatistic.hall, 0.4f)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.hall.toString())
         }
         RoomType.SANITARY -> {
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, floorClasses)
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, ceilingClasses)
             CheckLogic.compareAndResetClasses(cameraViewModel.flatStatistic.sanitary, wallClasses)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.sanitary.toString())
+            CheckLogic.isWallFinish(cameraViewModel.flatStatistic.sanitary)
+            CheckLogic.isFloorFinish(cameraViewModel.flatStatistic.sanitary)
+            CheckLogic.setSwitchFromSocket(cameraViewModel.flatStatistic.sanitary, 2)
+            CheckLogic.roundProbs(cameraViewModel.flatStatistic.sanitary, 0.4f)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.sanitary.toString())
         }
     }
-    Log.d("MYDEBUG", cameraViewModel.flatStatistic.toString())
     cameraViewModel.selectedRoomType.value = null
 }
+
+//fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn){
+//    val roomType = cameraViewModel.selectedRoomType.value
+//    cameraViewModel.roomRealData = yolov8Ncnn.data
+//    Log.d("MYDEBUG", cameraViewModel.roomRealData.toString())
+//
+//}
 
 @Composable
 fun RoomFragment(

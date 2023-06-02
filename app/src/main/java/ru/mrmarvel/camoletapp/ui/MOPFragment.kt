@@ -31,18 +31,22 @@ fun processMOPStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolo
             val index = cameraViewModel.floorMOPStatistic.mop[key]?.lastIndex ?: 0
             if (key == 11)
                 cameraViewModel.floorMOPStatistic.mop[key]?.set(index, value[1])
-            else if (value[1] > 20)
+            else
                 cameraViewModel.floorMOPStatistic.mop[key]?.set(index, value[0])
         }
     }
     // TODO: Проверить логику
-    val floorClasses: IntArray = intArrayOf(5, 6, 20)
-    val ceilingClasses: IntArray = intArrayOf(1, 2, 21)
+    val floorClasses: IntArray = intArrayOf(5, 20, 6)
+    val ceilingClasses: IntArray = intArrayOf(1, 21, 2)
     val wallClasses: IntArray = intArrayOf(15, 17, 18)
 
     CheckLogic.compareAndResetClasses(cameraViewModel.floorMOPStatistic.mop, floorClasses)
     CheckLogic.compareAndResetClasses(cameraViewModel.floorMOPStatistic.mop, ceilingClasses)
     CheckLogic.compareAndResetClasses(cameraViewModel.floorMOPStatistic.mop, wallClasses)
+    CheckLogic.isWallFinish(cameraViewModel.floorMOPStatistic.mop)
+    CheckLogic.isFloorFinish(cameraViewModel.floorMOPStatistic.mop)
+    CheckLogic.setSwitchFromSocket(cameraViewModel.floorMOPStatistic.mop, 1)
+    CheckLogic.roundProbs(cameraViewModel.floorMOPStatistic.mop, 0.4f)
 
     Log.d("MYDEBUG", cameraViewModel.floorMOPStatistic.mop.toString())
 }

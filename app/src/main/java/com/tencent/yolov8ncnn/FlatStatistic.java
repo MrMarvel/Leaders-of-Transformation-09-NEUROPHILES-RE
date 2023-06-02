@@ -31,8 +31,9 @@ public class FlatStatistic {
         }
         for (int i = 0; i <= 22; i++){
             if (!ignores.contains(i)) {
-                if (!map.containsKey(i)) map.put(i, new Vector<Float>(){{add(0.0f);}});
-                else map.get(i).add(0.0f);
+                float value = i == 22 ? 1.0f : 0.0f;
+                if (!map.containsKey(i)) map.put(i, new Vector<Float>(){{add(value);}});
+                else map.get(i).add(value);
             }
         }
         return map;
