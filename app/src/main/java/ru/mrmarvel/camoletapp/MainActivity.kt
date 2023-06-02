@@ -31,10 +31,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.monitoringitembuildingnew.MonitoringItemBuildingNew
 import ru.mrmarvel.camoletapp.screens.CameraScreen
@@ -55,6 +57,7 @@ val elem = @Composable {
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val sharedViewModel: SharedViewModel by viewModels()
+    private val cameraScreenViewModel: CameraScreenViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -94,7 +97,8 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("observe_start_screen") {
-                            ObserveStartScreen(sharedViewModel,
+                            ObserveStartScreen(
+                                sharedViewModel,
                                 navigateToCameraScreen = {
                                     navController.navigate("camera_screen")
                                 },
@@ -104,7 +108,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("observe_result_screen") {
-                            ObserveResultScreen(sharedViewModel, navigateToMonitoringScreen = {
+                            ObserveResultScreen(
+                                cameraScreenViewModel = cameraScreenViewModel,
+                                sharedViewModel = sharedViewModel,
+                                navigateToMonitoringScreen = {
                                 navController.navigate("monitoring_screen")
                             })
                         }

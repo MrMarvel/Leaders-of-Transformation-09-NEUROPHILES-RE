@@ -18,13 +18,16 @@ import androidx.compose.ui.unit.dp
 import ru.mrmarvel.camoletapp.backbutton.BackButton
 import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
+import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.infofield.InfoField
 import ru.mrmarvel.camoletapp.util.ExcelWriter
+import ru.mrmarvel.camoletapp.util.StatCounter
 import ru.mrmarvel.camoletapp.videoframe.VideoFrame
 
 @Composable
 fun ObserveResultScreen(
+    cameraScreenViewModel: CameraScreenViewModel,
     sharedViewModel: SharedViewModel = SharedViewModel(),
     navigateToMonitoringScreen: () -> Unit
 ) {
@@ -53,6 +56,7 @@ fun ObserveResultScreen(
                 Blue1lineButton(elementModifier,
                     buttonText = "Скачать скор-карту",
                     onItemClicked = {
+                        StatCounter.calculatePercent(context, sharedViewModel, cameraScreenViewModel)
                         Toast.makeText(context, "Скачать скор-карту!", Toast.LENGTH_SHORT).show()
                     }
                 )
@@ -60,9 +64,9 @@ fun ObserveResultScreen(
                     buttonText = "Скачать “шахматки”",
                     onItemClicked = {
                         // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
-                        var excelWriter: ExcelWriter = ExcelWriter()
-                        excelWriter.readWorkbook(context)
-                        excelWriter.fillReport()
+                        //var excelWriter: ExcelWriter = ExcelWriter()
+                        //excelWriter.readWorkbook(context)
+                        //excelWriter.fillReport()
                         Log.d("FILE SAVED", "12341234")
                         Toast.makeText(context, "Скачать “шахматки”!", Toast.LENGTH_SHORT).show()
                     }
