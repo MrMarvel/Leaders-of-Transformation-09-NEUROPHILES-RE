@@ -134,7 +134,7 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
             if (g_yolo) {
                 std::vector<Object> objects;
                 g_yolo->detect(rgb, objects);
-                g_yolo->draw(rgb, objects);
+                //g_yolo->draw(rgb, objects);
                 std::vector<Object>::iterator obj_iterator = objects.begin();
                 while (obj_iterator != objects.end()) {
                     if (detected.count(obj_iterator->label) > 0) {
@@ -176,7 +176,7 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
             }
         }
     }
-    draw_fps(rgb);
+    //draw_fps(rgb);
 }
 
 static MyNdkCamera *g_camera = 0;
