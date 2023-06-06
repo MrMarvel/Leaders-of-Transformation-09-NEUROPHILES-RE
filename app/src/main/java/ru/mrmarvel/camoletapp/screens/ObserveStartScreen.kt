@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.LocationListener
 import android.location.LocationManager
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -98,7 +99,7 @@ fun ObserveStartScreen(
     ) { scaffoldPadding ->
         getLocation(LocalContext.current
         ) { location -> sharedViewModel.currentLocation.value = location
-            // Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
         }
         Surface(
             Modifier.padding(scaffoldPadding),
