@@ -13,10 +13,6 @@ import ru.mrmarvel.camoletapp.data.sources.ProjectSource
 import java.util.stream.Stream
 
 class DistanceCounter {
-    fun degreesToRadians(degrees: Double): Double {
-        return degrees * Math.PI / 180
-    }
-
     fun split(coords: String): DoubleArray {
         return Stream.of(*coords.split(",".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray())
@@ -85,6 +81,7 @@ class DistanceCounter {
         // ЖОСКИЙ КОСТЫЛЬ ДЛЯ ОТОБРАЖЕНИЯ
         // ППОТОМУ ЧТО В БД НЕ ВСЕ КООРДИНАТЫ ЕСТЬ
         resultObject.section = sections[0]
+
         resultObject.floor = currSource.getFloorByIdSection(listOf(resultObject.section!!.id))[0]
 
         return resultObject

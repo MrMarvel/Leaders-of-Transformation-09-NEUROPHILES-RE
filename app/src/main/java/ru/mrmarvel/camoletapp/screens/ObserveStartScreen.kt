@@ -103,9 +103,6 @@ fun ObserveStartScreen(
                     buttonText = "Начать",
                     onItemClicked = {
                         cameraScreenViewModel.isFlatLocked.value = false
-
-                        //val a = sharedViewModel.currentLocation.value?.distanceTo(sharedViewModel.currentLocation.value)
-                        // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
                         navigateToCameraScreen()
                     }
                 )
@@ -126,10 +123,8 @@ fun ObserveStartScreen(
                 val resultNearestObject = DistanceCounter().getNearestObject(sharedViewModel)
                 sharedViewModel.selectedProjectName.value = resultNearestObject.project?.title ?: ""
                 sharedViewModel.selectedBuildingName.value = resultNearestObject.house?.title ?: ""
-                sharedViewModel.selectedSectionNumber.value =
-                    resultNearestObject.section?.title ?: ""
-                sharedViewModel.selectedFloorNumber.value =
-                    resultNearestObject.floor?.floorNumber ?: ""
+                sharedViewModel.selectedSectionNumber.value = resultNearestObject.section?.title ?: ""
+                sharedViewModel.selectedFloorNumber.value = resultNearestObject.floor?.floorNumber ?: ""
             }
         }
         val observer = LifecycleEventObserver { _, event ->
@@ -227,9 +222,11 @@ private fun registerLocation(context: Context, locationListener: LocationListene
         5f,
         locationListener
     )
+    Log.d("MYDEBUG", "register successful!")
 }
 
 private fun unregisterLocation(context: Context, locationListener: LocationListener) {
     val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     locationManager.removeUpdates(locationListener)
+    Log.d("MYDEBUG", "unregister successful!")
 }
