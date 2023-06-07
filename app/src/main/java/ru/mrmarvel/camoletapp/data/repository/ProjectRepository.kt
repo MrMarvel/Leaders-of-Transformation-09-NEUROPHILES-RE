@@ -25,7 +25,4 @@ class ProjectRepository(private val projectSource: ProjectSource) {
     suspend fun getHouseByIdProject(ids: List<Int>): List<House> {
         return projectSource.getHouseByIdProject(ids)
     }
-
-
-
 }

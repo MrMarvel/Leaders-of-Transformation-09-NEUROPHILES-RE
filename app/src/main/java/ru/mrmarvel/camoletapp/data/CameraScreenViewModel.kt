@@ -32,7 +32,6 @@ class CameraScreenViewModel @Inject constructor(
     val currentFlatProgress = mutableStateOf(.0f)
     val isMOPSelected = mutableStateOf(false)
 
-    var yolov8Ncnn: MutableState<Yolov8Ncnn?> = mutableStateOf(null)
     var roomRealData = HashMap<Int, Vector<Float>>()
     var flatStatistic = FlatStatistic()
     var floorFlatStatistic: MutableList<FlatStatistic> = mutableListOf()
