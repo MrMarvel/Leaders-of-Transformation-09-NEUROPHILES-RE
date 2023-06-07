@@ -31,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -43,6 +42,7 @@ import ru.mrmarvel.camoletapp.screens.CameraScreen
 import ru.mrmarvel.camoletapp.screens.MonitoringScreen
 import ru.mrmarvel.camoletapp.screens.ObserveResultScreen
 import ru.mrmarvel.camoletapp.screens.ObserveStartScreen
+import ru.mrmarvel.camoletapp.screens.ProfileScreen
 import ru.mrmarvel.camoletapp.ui.theme.HelloFigmaTheme
 
 val elem = @Composable {
@@ -79,7 +79,10 @@ class MainActivity : ComponentActivity() {
                                 },
                                 navigateToObserverStartScreen = {
                                     navController.navigate("observe_start_screen")
-                                }
+                                },
+                                navigateToProfileScreen = {
+                                    navController.navigate("profile_screen")
+                                },
                             )
                         }
                         composable("camera_screen") {
@@ -114,7 +117,12 @@ class MainActivity : ComponentActivity() {
                                 cameraScreenViewModel = cameraScreenViewModel,
                                 sharedViewModel = sharedViewModel,
                                 navigateToMonitoringScreen = {
-                                navController.navigate("monitoring_screen")
+                                    navController.navigate("monitoring_screen")
+                                })
+                        }
+                        composable("profile_screen") {
+                            ProfileScreen(navigateToEditProfileScreen = {
+
                             })
                         }
                     }

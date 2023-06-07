@@ -44,7 +44,8 @@ val startingDate: Calendar = Calendar.Builder().setDate(2023, 5, 22).build()
 fun MonitoringScreen(
     sharedViewModel: SharedViewModel = SharedViewModel(),
     navigateToCameraScreen: () -> Unit,
-    navigateToObserverStartScreen: () -> Unit = {}
+    navigateToObserverStartScreen: () -> Unit = {},
+    navigateToProfileScreen: () -> Unit = {}
 ) {
     LaunchedEffect(true) {
         launch {
@@ -75,6 +76,7 @@ fun MonitoringScreen(
                     // Toast.makeText(context, "Открыть меню!", Toast.LENGTH_SHORT).show()
                 },
                 onProfileClick = {
+                    navigateToProfileScreen()
                     // Toast.makeText(context, "Открыть профиль!", Toast.LENGTH_SHORT).show()
                 },
                 appBarText = "МОНИТОРИНГ"
