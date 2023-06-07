@@ -6,7 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -117,9 +116,8 @@ fun MonitoringScreen(
                 }
             }
             NavigationDrawer(
-                modifier = Modifier.fillMaxHeight(),
-                closeDrawer = {closeDrawer()},
-                navigateToMonitoringScreen = {closeDrawer()},
+                scaffoldState = scaffoldState,
+                navigateToMonitoringScreen = {},
                 navigateToHelpScreen = navigateToHelpScreen
             )
         },

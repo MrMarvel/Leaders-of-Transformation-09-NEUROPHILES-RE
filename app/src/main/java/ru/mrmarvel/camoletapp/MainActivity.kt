@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +39,7 @@ import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.monitoringitembuildingnew.MonitoringItemBuildingNew
 import ru.mrmarvel.camoletapp.screens.CameraScreen
+import ru.mrmarvel.camoletapp.screens.HelpScreen
 import ru.mrmarvel.camoletapp.screens.MonitoringScreen
 import ru.mrmarvel.camoletapp.screens.ObserveResultScreen
 import ru.mrmarvel.camoletapp.screens.ObserveStartScreen
@@ -130,7 +130,14 @@ class MainActivity : ComponentActivity() {
                             })
                         }
                         composable("help_screen") {
-                            Text("Help screen")
+                            HelpScreen(
+                                navigateToMonitoringScreen = {
+                                    navController.popBackStack()
+                                },
+                                navigateToProfileScreen = {
+                                    navController.navigate("profile_screen")
+                                }
+                            )
                         }
                     }
                 }
