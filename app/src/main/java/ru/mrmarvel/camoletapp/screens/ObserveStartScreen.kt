@@ -3,6 +3,7 @@ package ru.mrmarvel.camoletapp.screens
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.util.Log
@@ -18,25 +19,35 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.mrmarvel.camoletapp.R
 import ru.mrmarvel.camoletapp.backbutton.BackButton
 import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
+import ru.mrmarvel.camoletapp.util.DistanceCounter
 import ru.mrmarvel.camoletapp.videoframe.VideoFrame
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -66,6 +77,7 @@ fun ObserveStartScreen(
             // Toast.makeText(context, "Нужно разрешение ${it.permission}!", Toast.LENGTH_LONG).show()
         }
     }
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     Scaffold(
         topBar = {
             CamoletAppBar(Modifier.fillMaxWidth(),
@@ -86,10 +98,13 @@ fun ObserveStartScreen(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                //val
                 Blue1lineButton(Modifier,
                     buttonText = "Начать",
                     onItemClicked = {
                         cameraScreenViewModel.isFlatLocked.value = false
+
+                        //val a = sharedViewModel.currentLocation.value?.distanceTo(sharedViewModel.currentLocation.value)
                         // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
                         navigateToCameraScreen()
                     }
@@ -97,14 +112,40 @@ fun ObserveStartScreen(
             }
         }
     ) { scaffoldPadding ->
-        getLocation(LocalContext.current
-        ) { location -> sharedViewModel.currentLocation.value = location
-            //Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
-        }
         Surface(
             Modifier.padding(scaffoldPadding),
         ) {
             ObserveStartMain(sharedViewModel = sharedViewModel, navigateBack = navigateBack)
+        }
+    }
+    DisposableEffect(lifecycleOwner) {
+        val onLocationChange = LocationListener { location: Location ->
+            sharedViewModel.currentLocation.value = location
+            Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
+            CoroutineScope(Dispatchers.IO).launch {
+                val resultNearestObject = DistanceCounter().getNearestObject(sharedViewModel)
+                sharedViewModel.selectedProjectName.value = resultNearestObject.project?.title ?: ""
+                sharedViewModel.selectedBuildingName.value = resultNearestObject.house?.title ?: ""
+                sharedViewModel.selectedSectionNumber.value =
+                    resultNearestObject.section?.title ?: ""
+                sharedViewModel.selectedFloorNumber.value =
+                    resultNearestObject.floor?.floorNumber ?: ""
+            }
+        }
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                Log.d("MYDEBUG", "START")
+                registerLocation(context, onLocationChange)
+            } else if (event == Lifecycle.Event.ON_STOP){
+                Log.d("MYDEBUG", "LIFESTOP")
+                unregisterLocation(context, onLocationChange)
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            Log.d("MYDEBUG", "DISPOSESTOP")
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 }
@@ -167,7 +208,7 @@ fun GeoInputPreview() {
 }
 
 
-private fun getLocation(context: Context, locationListener: LocationListener) {
+private fun registerLocation(context: Context, locationListener: LocationListener) {
     val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     if (ActivityCompat.checkSelfPermission(
             context,
@@ -186,5 +227,9 @@ private fun getLocation(context: Context, locationListener: LocationListener) {
         5f,
         locationListener
     )
+}
 
+private fun unregisterLocation(context: Context, locationListener: LocationListener) {
+    val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    locationManager.removeUpdates(locationListener)
 }

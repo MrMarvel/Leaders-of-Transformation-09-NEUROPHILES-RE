@@ -13,7 +13,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +48,7 @@ fun MonitoringScreen(
 ) {
     LaunchedEffect(true) {
         launch {
-            sharedViewModel.projectRepository.getAll()
+            sharedViewModel.projectRepository.getProjects()
             sharedViewModel.monitoringBuildingGroupList.clear()
             sharedViewModel.monitoringBuildingGroupList += sharedViewModel._monitoringBuildingGroupList
             for (project in sharedViewModel.projectRepository.projects.value) {
@@ -57,7 +56,7 @@ fun MonitoringScreen(
                     MonitoringBuildingGroup(
                         id = project.id,
                         opened = false,
-                        coordinates = project.coordinates,
+                        coordinates = project.coordinates ?: "",
                         date = Date(),
                         items = listOf(),
                         name = project.title

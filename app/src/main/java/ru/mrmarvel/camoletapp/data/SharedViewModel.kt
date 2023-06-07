@@ -8,6 +8,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import ru.mrmarvel.camoletapp.data.models.MonitoringBuildingGroup
 import ru.mrmarvel.camoletapp.data.models.MonitoringBuildingItem
+import ru.mrmarvel.camoletapp.data.models.ResultNearestObject
 import ru.mrmarvel.camoletapp.data.repository.ProjectRepository
 import ru.mrmarvel.camoletapp.data.sources.ProjectSource
 import ru.mrmarvel.camoletapp.screens.startingDate
