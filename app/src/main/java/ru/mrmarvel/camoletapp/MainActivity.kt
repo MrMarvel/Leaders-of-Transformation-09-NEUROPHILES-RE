@@ -125,9 +125,16 @@ class MainActivity : ComponentActivity() {
                                 })
                         }
                         composable("profile_screen") {
-                            ProfileScreen(navigateToEditProfileScreen = {
-
-                            })
+                            ProfileScreen(
+                                navigateToMonitoringScreen = {
+                                    navController.navigate("monitoring_screen") {
+                                        popUpTo("monitoring_screen") {inclusive = true}
+                                    }
+                                },
+                                navigateToHelpScreen = {
+                                    navController.navigate("help_screen")
+                                }
+                            )
                         }
                         composable("help_screen") {
                             HelpScreen(

@@ -7,28 +7,55 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ru.mrmarvel.camoletapp.R
+import kotlinx.coroutines.launch
+import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
+import ru.mrmarvel.camoletapp.camoletappbar.Show
 import ru.mrmarvel.camoletapp.customcamoletappbar.CustomCamoletAppBar
 import ru.mrmarvel.camoletapp.profilelabel.ProfileLabel
+import ru.mrmarvel.camoletapp.ui.NavigationDrawer
 
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navigateToEditProfileScreen: () ->Unit ={}) {
+fun ProfileScreen(
+    modifier: Modifier = Modifier,
+    navigateToHelpScreen: () -> Unit = {},
+    navigateToMonitoringScreen: () -> Unit = {}
+) {
+    val scaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        scaffoldState = scaffoldState,
         topBar = {
-        CustomCamoletAppBar(modifier.fillMaxWidth(), labelText = "ПРОФИЛЬ",
-            leftImage = painterResource(id = R.drawable.burger_image),
-            showLeftImage = true,
-            showRightImage = true,
-        )
-    }) {padding ->
+            val coroutineScope = rememberCoroutineScope()
+            CamoletAppBar(modifier.fillMaxWidth(),
+                appBarText = "ПРОФИЛЬ",
+                show = Show.All,
+                onBurgerClick = {
+                    coroutineScope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }
+            )
+        },
+        drawerContent = {
+            NavigationDrawer(scaffoldState = scaffoldState,
+                navigateToHelpScreen = navigateToHelpScreen,
+                navigateToMonitoringScreen = navigateToMonitoringScreen
+            )
+        },
+        drawerBackgroundColor = Color.Transparent,
+        drawerElevation = 0.dp,
+    ) {padding ->
         Surface(
             Modifier
                 .padding(padding)
@@ -58,8 +85,12 @@ fun ProfileScreen(modifier: Modifier = Modifier, navigateToEditProfileScreen: ()
                     ProfileLabel(
                         Modifier.padding(bottom = 16.dp),
                         text = "120894")
-                    val elementModifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-                    val elementLabelModifier = Modifier.padding(bottom = 1.dp).fillMaxWidth()
+                    val elementModifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                    val elementLabelModifier = Modifier
+                        .padding(bottom = 1.dp)
+                        .fillMaxWidth()
                     Column {
                         Text("Фамилия", elementLabelModifier)
                         ProfileLabel(elementModifier, text = "Унгер")
