@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,7 +44,7 @@ import ru.mrmarvel.camoletapp.screens.MonitoringScreen
 import ru.mrmarvel.camoletapp.screens.ObserveResultScreen
 import ru.mrmarvel.camoletapp.screens.ObserveStartScreen
 import ru.mrmarvel.camoletapp.screens.ProfileScreen
-import ru.mrmarvel.camoletapp.ui.theme.HelloFigmaTheme
+import ru.mrmarvel.camoletapp.ui.theme.CamoletTheme
 
 val elem = @Composable {
     MonitoringItemBuildingNew(
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val context = LocalContext.current
-            HelloFigmaTheme {
+            CamoletTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -83,6 +84,9 @@ class MainActivity : ComponentActivity() {
                                 navigateToProfileScreen = {
                                     navController.navigate("profile_screen")
                                 },
+                                navigateToHelpScreen = {
+                                    navController.navigate("help_screen")
+                                }
                             )
                         }
                         composable("camera_screen") {
@@ -125,6 +129,9 @@ class MainActivity : ComponentActivity() {
 
                             })
                         }
+                        composable("help_screen") {
+                            Text("Help screen")
+                        }
                     }
                 }
             }
@@ -135,7 +142,7 @@ class MainActivity : ComponentActivity() {
 @Preview(heightDp = 360)
 @Composable
 private fun PreviewThreeBlock() {
-    HelloFigmaTheme() {
+    CamoletTheme() {
         Surface(
             color = MaterialTheme.colors.background,
             modifier = Modifier.fillMaxSize(),
@@ -155,7 +162,7 @@ private fun PreviewThreeBlock() {
 @Composable
 fun MonitoringBuildingItemPreview() {
     Box(Modifier.wrapContentSize()) {
-        HelloFigmaTheme() {
+        CamoletTheme() {
             MonitoringItemBuildingNew(
                 dateNumber = "19",
                 dateFull = "Март 19 2024",
