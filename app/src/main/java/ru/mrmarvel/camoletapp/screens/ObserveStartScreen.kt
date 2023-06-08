@@ -134,11 +134,11 @@ fun ObserveStartScreen(
     if (permissionState.allPermissionsGranted) {
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_START) {
-                    Log.d("MYDEBUG", "START")
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    Log.d("MYDEBUG", "ON_RESUME")
                     registerLocation(context, onLocationChange)
-                } else if (event == Lifecycle.Event.ON_STOP){
-                    Log.d("MYDEBUG", "LIFESTOP")
+                } else if (event == Lifecycle.Event.ON_PAUSE){
+                    Log.d("MYDEBUG", "ON_PAUSE")
                     unregisterLocation(context, onLocationChange)
                 }
             }
