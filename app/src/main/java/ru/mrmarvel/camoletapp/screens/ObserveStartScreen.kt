@@ -59,6 +59,19 @@ fun ObserveStartScreen(
     navigateBack: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    val onLocationChange = LocationListener { location: Location ->
+        Log.d("MYDEBUG", location.hasAltitude().toString())
+        Log.d("MYDEBUG", location.altitude.toString())
+        sharedViewModel.currentLocation.value = location
+        Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
+        CoroutineScope(Dispatchers.IO).launch {
+            val resultNearestObject = DistanceCounter().getNearestObject(sharedViewModel)
+            sharedViewModel.selectedProjectName.value = resultNearestObject.project?.title ?: ""
+            sharedViewModel.selectedBuildingName.value = resultNearestObject.house?.title ?: ""
+            sharedViewModel.selectedSectionNumber.value = resultNearestObject.section?.title ?: ""
+            sharedViewModel.selectedFloorNumber.value = resultNearestObject.floor?.floorNumber ?: ""
+        }
+    }
     val permissions = mutableListOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
@@ -77,6 +90,9 @@ fun ObserveStartScreen(
             // Toast.makeText(context, "Нужно разрешение ${it.permission}!", Toast.LENGTH_LONG).show()
         }
     }
+    // if (permissionState.allPermissionsGranted) {
+    //     registerLocation(context = context, locationListener = onLocationChange)
+    // }
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     Scaffold(
         topBar = {
@@ -115,34 +131,23 @@ fun ObserveStartScreen(
             ObserveStartMain(sharedViewModel = sharedViewModel, navigateBack = navigateBack)
         }
     }
-    DisposableEffect(lifecycleOwner) {
-        val onLocationChange = LocationListener { location: Location ->
-            Log.d("MYDEBUG", location.hasAltitude().toString())
-            Log.d("MYDEBUG", location.altitude.toString())
-            sharedViewModel.currentLocation.value = location
-            Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
-            CoroutineScope(Dispatchers.IO).launch {
-                val resultNearestObject = DistanceCounter().getNearestObject(sharedViewModel)
-                sharedViewModel.selectedProjectName.value = resultNearestObject.project?.title ?: ""
-                sharedViewModel.selectedBuildingName.value = resultNearestObject.house?.title ?: ""
-                sharedViewModel.selectedSectionNumber.value = resultNearestObject.section?.title ?: ""
-                sharedViewModel.selectedFloorNumber.value = resultNearestObject.floor?.floorNumber ?: ""
+    if (permissionState.allPermissionsGranted) {
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_START) {
+                    Log.d("MYDEBUG", "START")
+                    registerLocation(context, onLocationChange)
+                } else if (event == Lifecycle.Event.ON_STOP){
+                    Log.d("MYDEBUG", "LIFESTOP")
+                    unregisterLocation(context, onLocationChange)
+                }
             }
-        }
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                Log.d("MYDEBUG", "START")
-                registerLocation(context, onLocationChange)
-            } else if (event == Lifecycle.Event.ON_STOP){
-                Log.d("MYDEBUG", "LIFESTOP")
-                unregisterLocation(context, onLocationChange)
-            }
-        }
 
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            Log.d("MYDEBUG", "DISPOSESTOP")
-            lifecycleOwner.lifecycle.removeObserver(observer)
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                Log.d("MYDEBUG", "DISPOSESTOP")
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
         }
     }
 }
