@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -24,7 +25,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -117,6 +117,8 @@ fun ObserveStartScreen(
     }
     DisposableEffect(lifecycleOwner) {
         val onLocationChange = LocationListener { location: Location ->
+            Log.d("MYDEBUG", location.hasAltitude().toString())
+            Log.d("MYDEBUG", location.altitude.toString())
             sharedViewModel.currentLocation.value = location
             Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
             CoroutineScope(Dispatchers.IO).launch {
@@ -216,8 +218,13 @@ private fun registerLocation(context: Context, locationListener: LocationListene
         Log.d("MYDEBUG", "Нет разрешений!")
         return
     }
+    val locationProvider = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        LocationManager.FUSED_PROVIDER
+    } else {
+        LocationManager.GPS_PROVIDER
+    }
     locationManager.requestLocationUpdates(
-        LocationManager.GPS_PROVIDER,
+        locationProvider,
         5000,
         5f,
         locationListener
