@@ -219,18 +219,27 @@ private fun registerLocation(context: Context, locationListener: LocationListene
         return
     }
     Log.d("MYDEBUG", "ALL GEO PROVIDERS: ${locationManager.allProviders}")
-    val locationProvider = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        LocationManager.FUSED_PROVIDER
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        locationManager.requestLocationUpdates(
+            LocationManager.FUSED_PROVIDER,
+            5000,
+            5f,
+            locationListener
+        )
     } else {
-        // LocationManager.GPS_PROVIDER
-        "fused" // Even working with < 31 API
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            5000,
+            5f,
+            locationListener
+        )
+        locationManager.requestLocationUpdates(
+            LocationManager.NETWORK_PROVIDER,
+            5000,
+            10f,
+            locationListener
+        )
     }
-    locationManager.requestLocationUpdates(
-        locationProvider,
-        5000,
-        5f,
-        locationListener
-    )
     Log.d("MYDEBUG", "register successful!")
 }
 
