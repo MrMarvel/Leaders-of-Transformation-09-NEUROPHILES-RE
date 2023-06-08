@@ -1,10 +1,15 @@
 package ru.mrmarvel.camoletapp.screens
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.keyframes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -12,24 +17,45 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import ru.mrmarvel.camoletapp.R
 import ru.mrmarvel.camoletapp.bigappname.BigAppName
 import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
+import ru.mrmarvel.camoletapp.data.LoginError
 import ru.mrmarvel.camoletapp.data.LoginScreenViewModel
+
+private val shakeKeyframes: AnimationSpec<Float> = keyframes {
+    val durationMillis = 800
+    val easing = FastOutLinearInEasing
+
+    // generate 8 keyframes
+    for (i in 1..8) {
+        val x = when (i % 3) {
+            0 -> 4f
+            1 -> -4f
+            else -> 0f
+        }
+        x at durationMillis / 10 * i with easing
+    }
+}
 
 @Composable
 fun LoginScreen(
     loginScreenViewModel: LoginScreenViewModel,
     navigateToMonitoringScreen: () -> Unit = {},
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val loginError = remember {loginScreenViewModel.loginError}
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val formOffsetX = remember { Animatable(0f)  }
     Surface(
         Modifier.fillMaxSize()
     ) {
@@ -45,6 +71,7 @@ fun LoginScreen(
             val inputModifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 15.dp)
+                .offset(x = formOffsetX.value.dp)
             TextField(
                 modifier = inputModifier,
                 leadingIcon = {
@@ -73,10 +100,23 @@ fun LoginScreen(
                 singleLine = true,
                 label = {Text("Пароль")}
             )
+            if (loginError.value == LoginError.WRONG_PASSWORD) {
+                Text("Неправильный пароль", color = Color.Red)
+            }
+
             Blue1lineButton(
                 buttonText = "ВОЙТИ",
                 onItemClicked = {
-
+                    if (loginScreenViewModel.verifyLogin()) {
+                        navigateToMonitoringScreen()
+                    } else {
+                        coroutineScope.launch {
+                            formOffsetX.animateTo(
+                                targetValue = 0f,
+                                animationSpec = shakeKeyframes,
+                            )
+                        }
+                    }
                 },
                 modifier = Modifier.padding(top = 50.dp)
             )
