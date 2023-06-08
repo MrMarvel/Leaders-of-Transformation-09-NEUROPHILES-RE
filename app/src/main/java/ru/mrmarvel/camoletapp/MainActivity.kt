@@ -36,10 +36,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
+import ru.mrmarvel.camoletapp.data.LoginScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.monitoringitembuildingnew.MonitoringItemBuildingNew
 import ru.mrmarvel.camoletapp.screens.CameraScreen
 import ru.mrmarvel.camoletapp.screens.HelpScreen
+import ru.mrmarvel.camoletapp.screens.LoginScreen
 import ru.mrmarvel.camoletapp.screens.MonitoringScreen
 import ru.mrmarvel.camoletapp.screens.ObserveResultScreen
 import ru.mrmarvel.camoletapp.screens.ObserveStartScreen
@@ -59,6 +61,7 @@ val elem = @Composable {
 class MainActivity : ComponentActivity() {
     private val sharedViewModel: SharedViewModel by viewModels()
     private val cameraScreenViewModel: CameraScreenViewModel by viewModels()
+    private val loginScreenViewModel: LoginScreenViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -72,7 +75,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    NavHost(navController = navController, startDestination = "monitoring_screen") {
+                    NavHost(navController = navController, startDestination = "login_screen") {
+                        composable("login_screen") {
+                            LoginScreen(loginScreenViewModel = loginScreenViewModel)
+                        }
                         composable("monitoring_screen") {
                             MonitoringScreen(sharedViewModel = sharedViewModel,
                                 navigateToCameraScreen = {
