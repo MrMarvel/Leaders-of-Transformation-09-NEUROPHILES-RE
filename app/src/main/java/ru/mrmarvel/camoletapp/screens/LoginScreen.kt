@@ -1,5 +1,6 @@
 package ru.mrmarvel.camoletapp.screens
 
+import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -15,21 +16,23 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import ru.mrmarvel.camoletapp.R
 import ru.mrmarvel.camoletapp.bigappname.BigAppName
 import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.data.LoginError
 import ru.mrmarvel.camoletapp.data.LoginScreenViewModel
+import ru.mrmarvel.camoletapp.data.models.User
 
 private val shakeKeyframes: AnimationSpec<Float> = keyframes {
     val durationMillis = 800
@@ -51,11 +54,12 @@ fun LoginScreen(
     loginScreenViewModel: LoginScreenViewModel,
     navigateToMonitoringScreen: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val loginError = remember {loginScreenViewModel.loginError}
-    val username = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val formOffsetX = remember { Animatable(0f)  }
+    val loginError = remember { loginScreenViewModel.loginError }
+    val username = remember { loginScreenViewModel.username }
+    val password = remember { loginScreenViewModel.password }
+    val formOffsetX = remember { Animatable(0f) }
     Surface(
         Modifier.fillMaxSize()
     ) {
@@ -81,10 +85,10 @@ fun LoginScreen(
                     )
                 },
                 value = username.value,
-                onValueChange = {username.value = it},
-                placeholder = {Text("BungerUsername")},
+                onValueChange = { username.value = it },
+                placeholder = { Text("BungerUsername") },
                 singleLine = true,
-                label = {Text("Логин")}
+                label = { Text("Логин") }
             )
             TextField(
                 modifier = inputModifier,
@@ -94,23 +98,32 @@ fun LoginScreen(
                         contentDescription = "Password icon"
                     )
                 },
-                placeholder = {Text("coolpassword1234")},
+                placeholder = { Text("coolpassword1234") },
                 value = password.value,
-                onValueChange = {password.value = it},
+                onValueChange = { password.value = it },
                 singleLine = true,
-                label = {Text("Пароль")}
+                label = { Text("Пароль") }
             )
             if (loginError.value == LoginError.WRONG_PASSWORD) {
-                Text("Неправильный пароль", color = Color.Red)
+                Text(stringResource(id = R.string.login_error_unknown_user), color = Color.Red)
+            }
+            if (loginError.value == LoginError.BLANK_FIELDS) {
+                Text(stringResource(R.string.login_error_blank_fields), color = Color.Red)
+            }
+            if (loginError.value == LoginError.USERNAME_NOT_FOUND) {
+                Text(stringResource(R.string.login_error_unknown_user), color = Color.Red)
             }
 
             Blue1lineButton(
                 buttonText = "ВОЙТИ",
                 onItemClicked = {
-                    if (loginScreenViewModel.verifyLogin()) {
-                        navigateToMonitoringScreen()
-                    } else {
-                        coroutineScope.launch {
+                    coroutineScope.launch {
+                        if (loginScreenViewModel.verifyLogin()) {
+                            loginScreenViewModel.user?.let {
+                                saveUserToFile(context = context, it)
+                            }
+                            navigateToMonitoringScreen()
+                        } else {
                             formOffsetX.animateTo(
                                 targetValue = 0f,
                                 animationSpec = shakeKeyframes,
@@ -121,5 +134,11 @@ fun LoginScreen(
                 modifier = Modifier.padding(top = 50.dp)
             )
         }
+    }
+}
+
+fun saveUserToFile(context: Context, user: User) {
+    context.openFileOutput("login.json", Context.MODE_PRIVATE).use {
+        it.write(Gson().toJson(user).toString().toByteArray())
     }
 }

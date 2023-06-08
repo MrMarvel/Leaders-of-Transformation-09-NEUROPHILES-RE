@@ -16,6 +16,7 @@
 
 package ru.mrmarvel.camoletapp
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -66,6 +67,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         actionBar?.hide()
+        var isAuthorized = false
+        if (filesDir.list()?.contains("login.json") == true) {
+            isAuthorized = true
+        }
+        var startDestination = "login_screen"
+        if (isAuthorized) {
+            startDestination = "monitoring_screen"
+        }
         setContent {
             val navController = rememberNavController()
             val context = LocalContext.current
@@ -75,9 +84,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    NavHost(navController = navController, startDestination = "login_screen") {
+                    NavHost(navController = navController, startDestination = startDestination) {
                         composable("login_screen") {
-                            LoginScreen(loginScreenViewModel = loginScreenViewModel)
+                            LoginScreen(loginScreenViewModel = loginScreenViewModel,
+                                navigateToMonitoringScreen = {
+                                    navController.navigate("monitoring_screen") {
+                                        popUpTo("login_screen") {inclusive=true}
+                                    }
+                                }
+                            )
                         }
                         composable("monitoring_screen") {
                             MonitoringScreen(sharedViewModel = sharedViewModel,
