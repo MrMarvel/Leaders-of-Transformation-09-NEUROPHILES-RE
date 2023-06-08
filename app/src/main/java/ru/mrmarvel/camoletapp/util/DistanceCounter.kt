@@ -44,7 +44,8 @@ class DistanceCounter {
 
         // ЖОСКИЙ КОСТЫЛЬ ДЛЯ ОТОБРАЖЕНИЯ
         // ППОТОМУ ЧТО В БД НЕ ВСЕ КООРДИНАТЫ ЕСТЬ
-        resultObject.project = projects[0]
+        if (projects.size > 0) resultObject.project = projects[0]
+        else return resultObject
         val houses = currSource.getHouseByIdProject(listOf(resultObject.project!!.id))
         minDist = Double.MAX_VALUE
         for (house in houses){
@@ -62,7 +63,8 @@ class DistanceCounter {
 
         // ЖОСКИЙ КОСТЫЛЬ ДЛЯ ОТОБРАЖЕНИЯ
         // ППОТОМУ ЧТО В БД НЕ ВСЕ КООРДИНАТЫ ЕСТЬ
-        resultObject.house = houses[0]
+        if (houses.size > 0) resultObject.house = houses[0]
+        else return resultObject
         val sections = currSource.getSectionByIdHouse(listOf(resultObject.house!!.id))
         minDist = Double.MAX_VALUE
         for (section in sections){
@@ -80,7 +82,8 @@ class DistanceCounter {
 
         // ЖОСКИЙ КОСТЫЛЬ ДЛЯ ОТОБРАЖЕНИЯ
         // ППОТОМУ ЧТО В БД НЕ ВСЕ КООРДИНАТЫ ЕСТЬ
-        resultObject.section = sections[0]
+        if (sections.size > 0) resultObject.section = sections[0]
+        else return resultObject
 
         resultObject.floor = currSource.getFloorByIdSection(listOf(resultObject.section!!.id))[0]
 
