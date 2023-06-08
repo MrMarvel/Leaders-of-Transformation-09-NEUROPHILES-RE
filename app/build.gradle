@@ -94,7 +94,6 @@ android {
 }
 
 dependencies {
-
     // CORE
     implementation 'androidx.core:core-ktx:1.7.0'
 
@@ -102,6 +101,9 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    // BCRYPT
+    implementation "de.nycode:bcrypt:2.2.0"
 
     //  Camerax dependencies
     implementation "androidx.camera:camera-core:1.0.2"
