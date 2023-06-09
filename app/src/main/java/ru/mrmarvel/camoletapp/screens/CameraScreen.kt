@@ -193,6 +193,10 @@ fun CameraScreen(
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
                     Log.d("MYDEBUG", "ON_RESUME")
+                    cameraViewModel.currentFlatNumber.value = DistanceCounter().getNearestFlat(
+                        sharedViewModel.nearestObject.value.flatsList,
+                        sharedViewModel.currentLocation.value
+                    )
                     registerLocation(context, onLocationChange)
                 } else if (event == Lifecycle.Event.ON_PAUSE){
                     Log.d("MYDEBUG", "ON_PAUSE")

@@ -92,7 +92,7 @@ class DistanceCounter {
         return resultObject
     }
 
-    fun getNearestFlat(flats: List<Flat>, currentLocation: Location): String {
+    fun getNearestFlat(flats: List<Flat>, currentLocation: Location?): String {
         var minDist: Double = Double.MAX_VALUE
         var nearestFlat: Int = 0
 
