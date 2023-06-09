@@ -16,6 +16,7 @@ import ru.mrmarvel.camoletapp.domain.repository.CustomCameraRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mrmarvel.camoletapp.data.models.Flat
+import ru.mrmarvel.camoletapp.util.StatCounter
 import java.util.HashMap
 import java.util.Vector
 import javax.inject.Inject
@@ -39,6 +40,7 @@ class CameraScreenViewModel @Inject constructor(
     var flatStatistic = FlatStatistic()
     var floorFlatStatistic: MutableList<FlatStatistic> = mutableListOf()
     var floorMOPStatistic: MOPStatistic = MOPStatistic()
+
 
 
     fun showCameraPreview(

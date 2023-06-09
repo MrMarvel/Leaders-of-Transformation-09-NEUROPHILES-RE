@@ -18,25 +18,40 @@ import ru.mrmarvel.camoletapp.data.SharedViewModel;
 
 public class StatCounter {
 
-    public static HashMap<Integer, Float> flatCounter = new HashMap<>();
-    public static HashMap<Integer, Float> mopCounter = new HashMap<>();
+    public HashMap<Integer, Float> flatCounter;
+    public HashMap<Integer, Float> mopCounter;
+
+    public ExcelWriter excelWriter;
+
+    public StatCounter() {
+        this.flatCounter = new HashMap<>();
+        this.mopCounter = new HashMap<>();
+        this.excelWriter = new ExcelWriter();
+    }
 
 
-    public static void calculatePercent(Context context, SharedViewModel sharedViewModel, CameraScreenViewModel viewModel){
+    public void calculatePercent(
+            Context context,
+            SharedViewModel sharedViewModel,
+            CameraScreenViewModel viewModel,
+            int floor,
+            int section,
+            int maxFloor
+    ) {
         List<FlatStatistic> floorFlatStatic = viewModel.getFloorFlatStatistic();
         MOPStatistic floorMOPStatic = viewModel.getFloorMOPStatistic();
         int bathConter = 0;
         MutableState<Integer> roomCounter = sharedViewModel.getObserveRoomCount();
         MutableState<Integer> MOPCounter = sharedViewModel.getObserveMOPCount();
 //        int[] countableClasses = {22, 8, 11, 12, 4};
-        for(FlatStatistic item: floorFlatStatic){
+        for (FlatStatistic item : floorFlatStatic) {
             // iterate through objects
             // kitchen
             int cnt = 0;
-            for(HashMap<Integer, Vector<Float>> map: item.getAllMaps()){
-                for(Map.Entry<Integer, Vector<Float>> entry : map.entrySet()){
+            for (HashMap<Integer, Vector<Float>> map : item.getAllMaps()) {
+                for (Map.Entry<Integer, Vector<Float>> entry : map.entrySet()) {
                     int id = entry.getKey();
-                    if(flatCounter.get(id) == null){
+                    if (flatCounter.get(id) == null) {
 //                        if(IntStream.of(countableClasses).anyMatch(x -> x == id)){
 //                            flatCounter.put(id, entry.getValue().stream().reduce(0.0f, Float::sum));
 //                        }
@@ -44,8 +59,7 @@ public class StatCounter {
 //                            flatCounter.put(id, (float)entry.getValue().size());
 //                        }
                         flatCounter.put(id, entry.getValue().stream().reduce(0.0f, Float::sum));
-                    }
-                    else{
+                    } else {
 //                        if(IntStream.of(countableClasses).anyMatch(x -> x == id)){
 //                            flatCounter.put(id, flatCounter.get(id) + entry.getValue().stream().reduce(0.0f, Float::sum));
 //                        }
@@ -56,15 +70,15 @@ public class StatCounter {
                     }
                 }
                 if (cnt == 3) {
-                    bathConter+= map.size() > 0 ? map.get(0).size() : 0;
+                    bathConter += map.size() > 0 ? map.get(0).size() : 0;
                 }
                 cnt++;
             }
         }
 
-        for(Map.Entry<Integer, Vector<Float>> entry : floorMOPStatic.mop.entrySet()){
+        for (Map.Entry<Integer, Vector<Float>> entry : floorMOPStatic.mop.entrySet()) {
             int id = entry.getKey();
-            if(mopCounter.get(id) == null){
+            if (mopCounter.get(id) == null) {
 //                if(IntStream.of(countableClasses).anyMatch(x -> x == id)){
 //                    mopCounter.put(id, entry.getValue().stream().reduce(0.0f, Float::sum));
 //
@@ -73,8 +87,7 @@ public class StatCounter {
 //                }
                 mopCounter.put(id, entry.getValue().stream().reduce(0.0f, Float::sum));
 
-            }
-            else{
+            } else {
 //                if(IntStream.of(countableClasses).anyMatch(x -> x == id)){
 //                    mopCounter.put(id, mopCounter.get(id) + entry.getValue().stream().reduce(0.0f, Float::sum));
 //                }
@@ -105,7 +118,7 @@ public class StatCounter {
             result[9] = flatCounter.get(4) / ((float) roomCounter.getValue());
 
             if (flatCounter.containsKey(19) && flatCounter.containsKey(22)) {
-                result[12] = flatCounter.get(19)  / flatCounter.get(22);
+                result[12] = flatCounter.get(19) / flatCounter.get(22);
             }
 
             if (flatCounter.containsKey(8) && flatCounter.containsKey(22)) {
@@ -122,11 +135,10 @@ public class StatCounter {
         }
 
         result[10] = ((flatCounter.size() > 0 ? flatCounter.get(14) : 0)
-                     + (mopCounter.size() > 0 ? mopCounter.get(14) : 0))
-                     > 0 ? 1.0f : 0.0f;
+                + (mopCounter.size() > 0 ? mopCounter.get(14) : 0))
+                > 0 ? 1.0f : 0.0f;
         result[11] = (flatCounter.size() > 0 ? flatCounter.get(11) : 0)
-                     + (mopCounter.size() > 0 ? mopCounter.get(11) : 0);
-
+                + (mopCounter.size() > 0 ? mopCounter.get(11) : 0);
 
 
         if (mopCounter.size() > 0) {
@@ -146,9 +158,21 @@ public class StatCounter {
             result[26] = mopCounter.get(1) / mCeilingCounter;
         }
 
-        ExcelWriter excelWriter = new ExcelWriter();
-        excelWriter.readWorkbook(context);
-        excelWriter.fillReport(result);
+        // FILL CHESS THINGY
 
+        // FLAT FLOOR, WALL, CEILING
+
+        // if independent sheets for MOP and FLAT
+        for (int i = 0; i < 27; i++) {
+            excelWriter.fillSheet(Percentage.values()[i], floor, section, maxFloor, result[i]);
+        }
+        // if shared sheets for MOP and FLAT
+//        for (int i = 0; i < 18; i++) {
+//            if (i < 9) {
+//                excelWriter.fillSheet(Percentage.values()[i], floor, section, maxFloor, (result[i] + result[27 - 8 + i]) / 2.0f);
+//            } else {
+//                excelWriter.fillSheet(Percentage.values()[i], floor, section, maxFloor, result[i]);
+//            }
+//        }
     }
 }

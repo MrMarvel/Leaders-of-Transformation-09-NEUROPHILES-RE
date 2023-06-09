@@ -31,13 +31,35 @@ public class ExcelWriter {
 
     //    private String nameTemplate = "Готовности по типу";
     public HashMap<Percentage, String> PercentageEnumToString = new HashMap<Percentage, String>(){{
-        put(Percentage.FLOOR_ROUGH, "floor_rough");
-        put(Percentage.FLOOR_FINISH, "finish_floor");
-        put(Percentage.TOILET, "toilet");
-        put(Percentage.RADIATOR, "radiator");
-        put(Percentage.CEILING, "ceiling");
-        put(Percentage.WALL_FINISH, "wall_finish");
-        put(Percentage.WALL_ROUGH, "wall_rough");
+        put(Percentage.FLOOR_ROUGH, "% Пола без отделки");
+        put(Percentage.FLOOR_PLASTER, "% Пола с черновой отделкой");
+        put(Percentage.FLOOR_FINISH, "% Пола с чистовой отделкой");
+        put(Percentage.CEILING_ROUGH, "% Потолка без отделки");
+        put(Percentage.CEILING_PLASTER, "% Потолка с черновой отделкой");
+        put(Percentage.CEILING_FINISH, "% Потолка с чистовой отделкой");
+        put(Percentage.WALL_ROUGH, "% Стен без отделки");
+        put(Percentage.WALL_PLASTER, "% Стен с черновой отделкой");
+        put(Percentage.WALL_FINISH, "% Стен с  чистовой отделкой");
+
+        put(Percentage.MOP_FLOOR_ROUGH, "% Пола без отделки в МОП");
+        put(Percentage.MOP_FLOOR_PLASTER, "% Пола с черновой отделкой в МОП");
+        put(Percentage.MOP_FLOOR_FINISH, "% Пола с чистовой отделкой в МОП");
+        put(Percentage.MOP_CEILING_ROUGH, "% Потолка без отделки в МОП");
+        put(Percentage.MOP_CEILING_PLASTER, "% Потолка с черновой отделкой в МОП");
+        put(Percentage.MOP_CEILING_FINISH, "% Потолка с чистовой отделкой в МОП");
+        put(Percentage.MOP_WALL_ROUGH, "% Стен без отделки в МОП");
+        put(Percentage.MOP_WALL_PLASTER, "% Стен с черновой отделкой в МОП");
+        put(Percentage.MOP_WALL_FINISH, "% Стен с  чистовой отделкой в МОП");
+
+        put(Percentage.DOORS, "% Дверей");
+        put(Percentage.TRASH, "% Мусора");
+        put(Percentage.SOCKET_SWITCH, "% Розеток и выключателей");
+        put(Percentage.WINDOW, "% Отделки окон");
+        put(Percentage.RADIATOR, "% Установки батарей");
+        put(Percentage.KITCHEN_STUFF, "% Установки кухонь");
+        put(Percentage.TOILET, "% Установки унитазов");
+        put(Percentage.BATH, "% Установки ванн");
+        put(Percentage.SINK, "% Установки раковин");
     }};
 
     public ExcelWriter() {
@@ -45,7 +67,7 @@ public class ExcelWriter {
     }
 
     public void readWorkbook(Context context){
-        BufferedReader reader = null;
+//        BufferedReader reader = null;
         try{
 //            reader = new BufferedReader(
 //                    new InputStreamReader(context.getAssets().open("filename.txt")));
@@ -63,11 +85,13 @@ public class ExcelWriter {
             Cell cell = row.getCell(4);
             cell.setCellValue(data[i]);
         }
-        saveWorkbook("report.xlsx");
+        saveWorkbook("report.xlsx", this.report);
     }
 
-    public void fillSheet(Percentage sheetName, int numFloor, int numSection, float percent) {
+    public void fillSheet(Percentage sheetName, int numFloor, int numSection, int maxFloor, float percent) {
+        numFloor = maxFloor - numFloor;
         numFloor++;
+        numSection++;
         // CHECK IF SHEET EXISTS
         String sheetN = PercentageEnumToString.get(sheetName);
         XSSFSheet currentSheet = this.workbook.getSheet(sheetN);
@@ -82,17 +106,27 @@ public class ExcelWriter {
         if (row == null){
             row = currentSheet.createRow(numFloor);
         }
+        Cell floorCell =  row.createCell(0);
+        floorCell.setCellValue(numFloor);
+
         Cell cell = row.createCell(numSection);
         cell.setCellValue(percent);
+
+        Row sectionRow = currentSheet.getRow(maxFloor + 2);
+        if (sectionRow == null){
+            sectionRow = currentSheet.createRow(maxFloor + 2);
+        }
+        Cell sectionCell =  sectionRow.createCell(numSection);
+        sectionCell.setCellValue(numSection);
     }
 
-    public void saveWorkbook(String filename) {
+    public void saveWorkbook(String filename, XSSFWorkbook workbook) {
         try {
             Log.d("MYDEBUG", "SAVING");
             File filePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
             //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(filePath);
-            this.report.write(out);
+            workbook.write(out);
             out.close();
             Log.d("MYDEBUG", "SAVED");
             System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
