@@ -47,6 +47,7 @@ class SharedViewModel: ViewModel() {
     val observeMOPCount = mutableStateOf(0)
 
     val currentLocation: MutableState<Location?> = mutableStateOf(null)
+    val nearestObject: MutableState<ResultNearestObject> = mutableStateOf(ResultNearestObject())
 
     init {
         _monitoringBuildingGroupList += MonitoringBuildingGroupProvider.monitoringItems

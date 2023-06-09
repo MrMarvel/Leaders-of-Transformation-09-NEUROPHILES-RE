@@ -139,12 +139,12 @@ class ProjectSource {
         }
     }
 
-    suspend fun getFlats(flatsNumbers: List<Int>): List<Flat> {
+    suspend fun getFlatsByIdFloor(ids: Int): List<Flat> {
         try {
             val client = OkHttpClient()
             val queryParams =
                 HttpUrl.parse("http://u1988986.isp.regruhosting.ru/rest")!!.newBuilder()
-                    .addQueryParameter("sql", "SELECT * FROM apartments;")
+                    .addQueryParameter("sql", "SELECT * FROM apartments where id_floor = $ids;")
             val api = Request.Builder()
                 .url(queryParams.build())
                 .get()
@@ -152,7 +152,7 @@ class ProjectSource {
             // BLOCKING
             val response = client.newCall(api).await()
             val result = response.body()?.string() ?: "[]"
-            Log.d("MYDEBUG", "Send data to server was: $result")
+            Log.d("MYDEBUG", "Get Flats: $result")
             val jsonArray = JSONArray(result)
             val ormArray = mutableListOf<Flat>()
             for (i in 0 until jsonArray.length()) {

@@ -67,5 +67,6 @@ data class ResultNearestObject(
     var project: Project? = null,
     var house: House? = null,
     var section: Section? = null,
-    var floor: Floor? = null
+    var floor: Floor? = null,
+    var flatsList: List<Flat> = listOf()
 )

@@ -1,6 +1,7 @@
 package ru.mrmarvel.camoletapp.data
 
 import android.content.Context
+import android.location.Location
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +15,7 @@ import com.tencent.yolov8ncnn.Yolov8Ncnn
 import ru.mrmarvel.camoletapp.domain.repository.CustomCameraRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.mrmarvel.camoletapp.data.models.Flat
 import java.util.HashMap
 import java.util.Vector
 import javax.inject.Inject
@@ -31,11 +33,13 @@ class CameraScreenViewModel @Inject constructor(
     val selectedRoomType: MutableState<RoomType?> = mutableStateOf(null)
     val currentFlatProgress = mutableStateOf(.0f)
     val isMOPSelected = mutableStateOf(false)
+    val currentLocation: MutableState<Location?> = mutableStateOf(null)
 
     var roomRealData = HashMap<Int, Vector<Float>>()
     var flatStatistic = FlatStatistic()
     var floorFlatStatistic: MutableList<FlatStatistic> = mutableListOf()
     var floorMOPStatistic: MOPStatistic = MOPStatistic()
+
 
     fun showCameraPreview(
         previewView: PreviewView,

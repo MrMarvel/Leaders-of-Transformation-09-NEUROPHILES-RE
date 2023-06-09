@@ -65,11 +65,11 @@ fun ObserveStartScreen(
         sharedViewModel.currentLocation.value = location
         Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
         CoroutineScope(Dispatchers.IO).launch {
-            val resultNearestObject = DistanceCounter().getNearestObject(sharedViewModel)
-            sharedViewModel.selectedProjectName.value = resultNearestObject.project?.title ?: ""
-            sharedViewModel.selectedBuildingName.value = resultNearestObject.house?.title ?: ""
-            sharedViewModel.selectedSectionNumber.value = resultNearestObject.section?.title ?: ""
-            sharedViewModel.selectedFloorNumber.value = resultNearestObject.floor?.floorNumber ?: ""
+            sharedViewModel.nearestObject.value = DistanceCounter().getNearestObject(sharedViewModel)
+            sharedViewModel.selectedProjectName.value = sharedViewModel.nearestObject.value.project?.title ?: ""
+            sharedViewModel.selectedBuildingName.value = sharedViewModel.nearestObject.value.house?.title ?: ""
+            sharedViewModel.selectedSectionNumber.value = sharedViewModel.nearestObject.value.section?.title ?: ""
+            sharedViewModel.selectedFloorNumber.value = sharedViewModel.nearestObject.value.floor?.floorNumber ?: ""
         }
     }
     val permissions = mutableListOf(
@@ -90,9 +90,6 @@ fun ObserveStartScreen(
             // Toast.makeText(context, "Нужно разрешение ${it.permission}!", Toast.LENGTH_LONG).show()
         }
     }
-    // if (permissionState.allPermissionsGranted) {
-    //     registerLocation(context = context, locationListener = onLocationChange)
-    // }
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     Scaffold(
         topBar = {
@@ -210,7 +207,7 @@ fun GeoInputPreview() {
 }
 
 
-private fun registerLocation(context: Context, locationListener: LocationListener) {
+public fun registerLocation(context: Context, locationListener: LocationListener) {
     val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     if (ActivityCompat.checkSelfPermission(
             context,
@@ -260,7 +257,7 @@ private fun registerLocation(context: Context, locationListener: LocationListene
     Log.d("MYDEBUG", "register successful!")
 }
 
-private fun unregisterLocation(context: Context, locationListener: LocationListener) {
+public fun unregisterLocation(context: Context, locationListener: LocationListener) {
     val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     locationManager.removeUpdates(locationListener)
     Log.d("MYDEBUG", "unregister successful!")

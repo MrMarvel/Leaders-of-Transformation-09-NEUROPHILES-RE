@@ -1,6 +1,7 @@
 package ru.mrmarvel.camoletapp.data.repository
 
 import androidx.compose.runtime.mutableStateOf
+import ru.mrmarvel.camoletapp.data.models.Flat
 import ru.mrmarvel.camoletapp.data.models.Floor
 import ru.mrmarvel.camoletapp.data.models.House
 import ru.mrmarvel.camoletapp.data.models.Project
@@ -24,5 +25,9 @@ class ProjectRepository(private val projectSource: ProjectSource) {
 
     suspend fun getHouseByIdProject(ids: List<Int>): List<House> {
         return projectSource.getHouseByIdProject(ids)
+    }
+
+    suspend fun getAllFlatsOnFloor(ids: Int): List<Flat> {
+        return projectSource.getFlatsByIdFloor(ids)
     }
 }
