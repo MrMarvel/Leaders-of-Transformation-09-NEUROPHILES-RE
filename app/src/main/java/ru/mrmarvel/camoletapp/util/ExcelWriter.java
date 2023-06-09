@@ -89,6 +89,7 @@ public class ExcelWriter {
     }
 
     public void fillSheet(Percentage sheetName, int numFloor, int numSection, int maxFloor, float percent) {
+        int floor = numFloor + 1;
         numFloor = maxFloor - numFloor;
         numFloor++;
         numSection++;
@@ -110,7 +111,7 @@ public class ExcelWriter {
         }
         Log.d("MYDEBUG", "SECOND IF");
         Cell floorCell =  row.createCell(0);
-        floorCell.setCellValue(numFloor);
+        floorCell.setCellValue(floor);
 
         Cell cell = row.createCell(numSection);
         cell.setCellValue(percent);
