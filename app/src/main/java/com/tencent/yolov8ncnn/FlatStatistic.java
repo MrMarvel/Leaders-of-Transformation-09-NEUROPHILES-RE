@@ -8,7 +8,7 @@ import java.util.Vector;
 
 public class FlatStatistic {
 
-    public int flatNumber;
+    public int flatId;
     public HashMap<Integer, Vector<Float>> add_room(RoomType room){
         List<Integer> ignores = null;
         HashMap<Integer, Vector<Float>> map = null;

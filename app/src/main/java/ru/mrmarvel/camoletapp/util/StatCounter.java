@@ -21,7 +21,6 @@ public class StatCounter {
 
     public HashMap<Integer, Float> flatCounter;
     public HashMap<Integer, Float> mopCounter;
-
     public ExcelWriter excelWriter;
 
     public StatCounter() {
