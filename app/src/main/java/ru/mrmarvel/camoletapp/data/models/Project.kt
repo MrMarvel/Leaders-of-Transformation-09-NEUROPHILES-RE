@@ -60,7 +60,12 @@ data class Flat(
     @SerializedName("wall_plaster")
     val wallPlaster: Int,
     val trash: Boolean,
-    val radiator: Int
+    val radiator: Int,
+    @SerializedName("floor_plaster")
+    val floorPlaster: Int,
+    @SerializedName("ceiling_plaster")
+    val ceilingPlaster: Int,
+    val windows: Int
 )
 
 data class ResultNearestObject(

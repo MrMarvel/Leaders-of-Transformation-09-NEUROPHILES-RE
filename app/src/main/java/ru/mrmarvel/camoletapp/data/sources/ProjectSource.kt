@@ -2,6 +2,7 @@ package ru.mrmarvel.camoletapp.data.sources
 
 import android.util.Log
 import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -12,6 +13,7 @@ import ru.mrmarvel.camoletapp.data.models.Floor
 import ru.mrmarvel.camoletapp.data.models.House
 import ru.mrmarvel.camoletapp.data.models.Project
 import ru.mrmarvel.camoletapp.data.models.Section
+import ru.mrmarvel.camoletapp.util.TypeAdapters
 
 class ProjectSource {
     suspend fun getProjects(): List<Project> {
@@ -155,14 +157,16 @@ class ProjectSource {
             Log.d("MYDEBUG", "Get Flats: $result")
             val jsonArray = JSONArray(result)
             val ormArray = mutableListOf<Flat>()
-            for (i in 0 until jsonArray.length()) {
-                val x =
-                    GsonBuilder().create().fromJson(jsonArray.get(i).toString(), Flat::class.java)
+            for (i in 0 until jsonArray.length() - 1) {
+                val x = TypeAdapters.gson.fromJson(jsonArray.get(i).toString(), Flat::class.java)
+//                val x = GsonBuilder().create().fromJson(jsonArray.get(i).toString(), Flat::class.java)
                 ormArray.add(x)
             }
+            Log.d("MYDEBUG", "Flats: $ormArray")
             return ormArray
         }
         catch (e: Exception){
+            Log.d("MYDEBUG", e.toString())
             return mutableListOf<Flat>()
         }
     }

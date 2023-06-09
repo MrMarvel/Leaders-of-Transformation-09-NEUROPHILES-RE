@@ -223,13 +223,15 @@ public fun registerLocation(context: Context, locationListener: LocationListener
     Log.d("MYDEBUG", "ALL GEO PROVIDERS: ${locationManager.allProviders}")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         try {
-            if (locationManager.isProviderEnabled(LocationManager.FUSED_PROVIDER))
+            if (locationManager.isProviderEnabled(LocationManager.FUSED_PROVIDER)) {
                 locationManager.requestLocationUpdates(
                     LocationManager.FUSED_PROVIDER,
                     5000,
                     5f,
                     locationListener
                 )
+                Log.d("MYDEBUG", "FUSED_PROVIDER")
+            }
         }
         catch(e: Exception) {}
     } else {
