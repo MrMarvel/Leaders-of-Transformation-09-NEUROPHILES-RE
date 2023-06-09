@@ -97,10 +97,10 @@ private fun ObserveResultMain(sharedViewModel: SharedViewModel = SharedViewModel
             VideoFrame()
             val elementModifier = Modifier.padding(vertical = 3.dp)
             Column(Modifier.padding(top = 24.dp)) {
-                InfoField(labelText = "ЖК", valueText ="Жульен", modifier = elementModifier)
-                InfoField(labelText = "Дом", valueText ="Корпус 1", modifier = elementModifier)
-                InfoField(labelText = "Секция", valueText ="2", modifier = elementModifier)
-                InfoField(labelText = "Этаж", valueText ="3", modifier = elementModifier)
+                InfoField(labelText = "ЖК", valueText = sharedViewModel.selectedProjectName.value, modifier = elementModifier)
+                InfoField(labelText = "Дом", valueText = sharedViewModel.selectedBuildingName.value, modifier = elementModifier)
+                InfoField(labelText = "Секция", valueText = sharedViewModel.selectedSectionNumber.value, modifier = elementModifier)
+                InfoField(labelText = "Этаж", valueText = sharedViewModel.selectedFloorNumber.value, modifier = elementModifier)
             }
         }
     }

@@ -225,25 +225,37 @@ private fun registerLocation(context: Context, locationListener: LocationListene
     }
     Log.d("MYDEBUG", "ALL GEO PROVIDERS: ${locationManager.allProviders}")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        locationManager.requestLocationUpdates(
-            LocationManager.FUSED_PROVIDER,
-            5000,
-            5f,
-            locationListener
-        )
+        try {
+            if (locationManager.isProviderEnabled(LocationManager.FUSED_PROVIDER))
+                locationManager.requestLocationUpdates(
+                    LocationManager.FUSED_PROVIDER,
+                    5000,
+                    5f,
+                    locationListener
+                )
+        }
+        catch(e: Exception) {}
     } else {
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            5000,
-            5f,
-            locationListener
-        )
-        locationManager.requestLocationUpdates(
-            LocationManager.NETWORK_PROVIDER,
-            5000,
-            10f,
-            locationListener
-        )
+        try {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    5000,
+                    5f,
+                    locationListener
+                )
+        }
+        catch(e: Exception) {}
+        try {
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+                locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    5000,
+                    10f,
+                    locationListener
+                )
+        }
+        catch(e: Exception) {}
     }
     Log.d("MYDEBUG", "register successful!")
 }
