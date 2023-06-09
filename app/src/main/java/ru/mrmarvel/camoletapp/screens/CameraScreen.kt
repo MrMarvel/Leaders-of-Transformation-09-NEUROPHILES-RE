@@ -105,11 +105,13 @@ fun CameraScreen(
         Log.d("MYDEBUG", location.toString())
         cameraViewModel.currentLocation.value = location
         Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
-        if (!cameraViewModel.isFlatLocked.value)
-            cameraViewModel.currentFlatNumber.value = DistanceCounter().getNearestFlat(
+        if (!cameraViewModel.isFlatLocked.value) {
+            cameraViewModel.currentFlat = DistanceCounter().getNearestFlat(
                 sharedViewModel.nearestObject.value.flatsList,
-                location
+                sharedViewModel.currentLocation.value
             )
+            cameraViewModel.currentFlatNumber.value = cameraViewModel.currentFlat.appNumber.toString()
+        }
     }
 
     Surface(
@@ -193,10 +195,11 @@ fun CameraScreen(
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
                     Log.d("MYDEBUG", "ON_RESUME")
-                    cameraViewModel.currentFlatNumber.value = DistanceCounter().getNearestFlat(
+                    cameraViewModel.currentFlat = DistanceCounter().getNearestFlat(
                         sharedViewModel.nearestObject.value.flatsList,
                         sharedViewModel.currentLocation.value
                     )
+                    cameraViewModel.currentFlatNumber.value = cameraViewModel.currentFlat.appNumber.toString()
                     registerLocation(context, onLocationChange)
                 } else if (event == Lifecycle.Event.ON_PAUSE){
                     Log.d("MYDEBUG", "ON_PAUSE")

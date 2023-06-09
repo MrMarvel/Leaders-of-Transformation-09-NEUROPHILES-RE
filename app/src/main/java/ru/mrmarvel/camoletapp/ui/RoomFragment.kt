@@ -244,7 +244,9 @@ fun RoomFragment(
                 isFloorStatSaved.value = true
                 cameraViewModel.floorFlatStatistic.add(cameraViewModel.flatStatistic)
             }
-            Log.d("MYDEBUG", cameraViewModel.floorFlatStatistic.size.toString())
+            // подсчет отправка в бд
+            // sendToBD(cameraViewModel)
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.toString())
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }

@@ -40,6 +40,7 @@ class CameraScreenViewModel @Inject constructor(
     var flatStatistic = FlatStatistic()
     var floorFlatStatistic: MutableList<FlatStatistic> = mutableListOf()
     var floorMOPStatistic: MOPStatistic = MOPStatistic()
+    var currentFlat: Flat = Flat()
 
 
 

@@ -92,11 +92,11 @@ class DistanceCounter {
         return resultObject
     }
 
-    fun getNearestFlat(flats: List<Flat>, currentLocation: Location?): String {
+    fun getNearestFlat(flats: List<Flat>, currentLocation: Location?): Flat {
         var minDist: Double = Double.MAX_VALUE
-        var nearestFlat: Int = 0
+        var nearestFlat: Flat = Flat()
 
-        if (currentLocation == null) return nearestFlat.toString()
+        if (currentLocation == null) return nearestFlat
 
         Log.d("MYDEBUG", "GETTING NEAREST FLAT")
         for (flat in flats){
@@ -108,9 +108,9 @@ class DistanceCounter {
             val dist = currentLocation.distanceTo(projLocation).toDouble()
             if (dist < minDist){
                 minDist = dist
-                nearestFlat = flat.appNumber
+                nearestFlat = flat
             }
         }
-        return nearestFlat.toString()
+        return nearestFlat
     }
 }
