@@ -32,24 +32,24 @@ public class ExcelWriter {
     //    private String nameTemplate = "Готовности по типу";
     public HashMap<Percentage, String> PercentageEnumToString = new HashMap<Percentage, String>(){{
         put(Percentage.FLOOR_ROUGH, "% Пола без отделки");
-        put(Percentage.FLOOR_PLASTER, "% Пола с черновой отделкой");
-        put(Percentage.FLOOR_FINISH, "% Пола с чистовой отделкой");
+        put(Percentage.FLOOR_PLASTER, "% Пола с черновой");
+        put(Percentage.FLOOR_FINISH, "% Пола с чистовой");
         put(Percentage.CEILING_ROUGH, "% Потолка без отделки");
-        put(Percentage.CEILING_PLASTER, "% Потолка с черновой отделкой");
-        put(Percentage.CEILING_FINISH, "% Потолка с чистовой отделкой");
+        put(Percentage.CEILING_PLASTER, "% Потолка с черновой");
+        put(Percentage.CEILING_FINISH, "% Потолка с чистовой");
         put(Percentage.WALL_ROUGH, "% Стен без отделки");
-        put(Percentage.WALL_PLASTER, "% Стен с черновой отделкой");
-        put(Percentage.WALL_FINISH, "% Стен с  чистовой отделкой");
+        put(Percentage.WALL_PLASTER, "% Стен с черновой");
+        put(Percentage.WALL_FINISH, "% Стен с чистовой");
 
-        put(Percentage.MOP_FLOOR_ROUGH, "% Пола без отделки в МОП");
-        put(Percentage.MOP_FLOOR_PLASTER, "% Пола с черновой отделкой в МОП");
-        put(Percentage.MOP_FLOOR_FINISH, "% Пола с чистовой отделкой в МОП");
-        put(Percentage.MOP_CEILING_ROUGH, "% Потолка без отделки в МОП");
-        put(Percentage.MOP_CEILING_PLASTER, "% Потолка с черновой отделкой в МОП");
-        put(Percentage.MOP_CEILING_FINISH, "% Потолка с чистовой отделкой в МОП");
-        put(Percentage.MOP_WALL_ROUGH, "% Стен без отделки в МОП");
-        put(Percentage.MOP_WALL_PLASTER, "% Стен с черновой отделкой в МОП");
-        put(Percentage.MOP_WALL_FINISH, "% Стен с  чистовой отделкой в МОП");
+        put(Percentage.MOP_FLOOR_ROUGH, "% Пола без отделки МОП");
+        put(Percentage.MOP_FLOOR_PLASTER, "% Пола с черновой МОП");
+        put(Percentage.MOP_FLOOR_FINISH, "% Пола с чистовой МОП");
+        put(Percentage.MOP_CEILING_ROUGH, "% Потолка без отделки МОП");
+        put(Percentage.MOP_CEILING_PLASTER, "% Потолка с черновой МОП");
+        put(Percentage.MOP_CEILING_FINISH, "% Потолка с чистовой МОП");
+        put(Percentage.MOP_WALL_ROUGH, "% Стен без отделки МОП");
+        put(Percentage.MOP_WALL_PLASTER, "% Стен с черновой МОП");
+        put(Percentage.MOP_WALL_FINISH, "% Стен с чистовой МОП");
 
         put(Percentage.DOORS, "% Дверей");
         put(Percentage.TRASH, "% Мусора");
@@ -95,17 +95,20 @@ public class ExcelWriter {
         // CHECK IF SHEET EXISTS
         String sheetN = PercentageEnumToString.get(sheetName);
         XSSFSheet currentSheet = this.workbook.getSheet(sheetN);
+        Log.d("MYDEBUG", "START");
         if (currentSheet == null) {
             currentSheet = this.workbook.createSheet(sheetN);
             Row sheetNameRow = currentSheet.createRow(0);
             Cell sheetNameCell = sheetNameRow.createCell(0);
             sheetNameCell.setCellValue(sheetN);
         }
+        Log.d("MYDEBUG", "FIRST IF");
         // FILL CURRENT
         Row row = currentSheet.getRow(numFloor);
         if (row == null){
             row = currentSheet.createRow(numFloor);
         }
+        Log.d("MYDEBUG", "SECOND IF");
         Cell floorCell =  row.createCell(0);
         floorCell.setCellValue(numFloor);
 
@@ -116,8 +119,10 @@ public class ExcelWriter {
         if (sectionRow == null){
             sectionRow = currentSheet.createRow(maxFloor + 2);
         }
+        Log.d("MYDEBUG", "3 IF");
         Cell sectionCell =  sectionRow.createCell(numSection);
         sectionCell.setCellValue(numSection);
+        Log.d("MYDEBUG", "END");
     }
 
     public void saveWorkbook(String filename, XSSFWorkbook workbook) {

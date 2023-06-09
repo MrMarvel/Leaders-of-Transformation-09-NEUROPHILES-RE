@@ -1,6 +1,7 @@
 package ru.mrmarvel.camoletapp.util;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.compose.runtime.MutableState;
 
@@ -163,7 +164,11 @@ public class StatCounter {
         // FLAT FLOOR, WALL, CEILING
 
         // if independent sheets for MOP and FLAT
+        int a = 0;
         for (int i = 0; i < 27; i++) {
+            Log.d("MYDEBUG", String.valueOf(i));
+            if (i == 19)
+                a = 0;
             excelWriter.fillSheet(Percentage.values()[i], floor, section, maxFloor, result[i]);
         }
         // if shared sheets for MOP and FLAT
