@@ -102,7 +102,7 @@ class DistanceCounter {
         for (flat in flats){
             if (flat.coordinates == null) continue
             val projLocation = Location("")
-            val coords = split(flat.coordinates)
+            val coords = split(flat.coordinates!!)
             projLocation.latitude = coords[0]
             projLocation.longitude = coords[1]
             val dist = currentLocation.distanceTo(projLocation).toDouble()

@@ -16,6 +16,7 @@ import java.util.stream.IntStream;
 
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel;
 import ru.mrmarvel.camoletapp.data.SharedViewModel;
+import ru.mrmarvel.camoletapp.data.models.Flat;
 
 public class StatCounter {
 
@@ -179,4 +180,99 @@ public class StatCounter {
 //            }
 //        }
     }
+
+    public List<Flat> calculateFlatsStatistics(CameraScreenViewModel viewModel){
+        List<FlatStatistic> floorFlatStatic = viewModel.getFloorFlatStatistic();
+        List<Flat> result = new Vector<>();
+        HashMap<Integer, Float> roomStatCounter;
+        for(FlatStatistic item: floorFlatStatic) {
+            int roomCount = 0;
+            Flat currentFlat = new Flat();
+            currentFlat.setId(item.flatId);
+            roomStatCounter = new HashMap<>();
+            for (HashMap<Integer, Vector<Float>> map : item.getAllMaps()) {
+                for (Map.Entry<Integer, Vector<Float>> entry : map.entrySet()) {
+                    roomCount += entry.getValue().size();
+                }
+            }
+            for (HashMap<Integer, Vector<Float>> map : item.getAllMaps()) {
+                for (Map.Entry<Integer, Vector<Float>> entry : map.entrySet()) {
+                    int id = entry.getKey();
+                    if (roomStatCounter.get(id) == null) {
+                        roomStatCounter.put(id, entry.getValue().stream().reduce(0.0f, Float::sum));
+                    }
+                    else{
+                        roomStatCounter.put(id, roomStatCounter.get(id) + entry.getValue().stream().reduce(0.0f, Float::sum));
+                    }
+                }
+            }
+            currentFlat.setFloorRough((roomStatCounter.get(6) != null ? roomStatCounter.get(6) : 0) / roomCount);
+            currentFlat.setFloorPlaster((roomStatCounter.get(20) != null ? roomStatCounter.get(20): 0) / roomCount);
+            currentFlat.setFloorFinish((roomStatCounter.get(5) != null ? roomStatCounter.get(5): 0) / roomCount);
+
+            currentFlat.setWallRough((roomStatCounter.get(18) != null ? roomStatCounter.get(18): 0) / roomCount);
+            currentFlat.setWallPlaster((roomStatCounter.get(17) != null ? roomStatCounter.get(17): 0) / roomCount);
+            currentFlat.setWallFinish((roomStatCounter.get(15) != null ? roomStatCounter.get(15): 0) / roomCount);
+
+            currentFlat.setCeilingRough((roomStatCounter.get(2) != null ? roomStatCounter.get(2): 0) / roomCount);
+            currentFlat.setCeilingPlaster((roomStatCounter.get(21) != null ? roomStatCounter.get(21): 0) / roomCount);
+            currentFlat.setCeilingFinish((roomStatCounter.get(1) != null ? roomStatCounter.get(1): 0) / roomCount);
+
+            currentFlat.setWindowsill((roomStatCounter.get(19) != null ? roomStatCounter.get(19): 0) /(roomStatCounter.get(22) != null && roomStatCounter.get(22) != 0 ? roomStatCounter.get(22) : 1));
+            currentFlat.setSlopes((roomStatCounter.get(10) != null ? roomStatCounter.get(10): 0) / (roomStatCounter.get(22) != null && roomStatCounter.get(22) != 0 ? roomStatCounter.get(22) : 1));
+            currentFlat.setRadiator((roomStatCounter.get(8) != null ? roomStatCounter.get(8): 0) / (roomStatCounter.get(22) != null && roomStatCounter.get(22) != 0 ? roomStatCounter.get(22) : 1));
+
+
+            currentFlat.setWindows(roomStatCounter.get(22) != null ? Math.round(roomStatCounter.get(22)): 0);
+            currentFlat.setDoors((roomStatCounter.get(4) != null ? roomStatCounter.get(4): 0) / roomCount);
+
+            currentFlat.setSwitches(roomStatCounter.get(12) != null ? Math.round(roomStatCounter.get(12)): 0);
+            currentFlat.setSockets(roomStatCounter.get(11) != null ? Math.round(roomStatCounter.get(11)): 0);
+            currentFlat.setToilet(roomStatCounter.get(11) != null ? roomStatCounter.get(11) > 0: false);
+            currentFlat.setBath(roomStatCounter.get(0) != null ? roomStatCounter.get(0) > 0: false);
+            currentFlat.setSink(roomStatCounter.get(9) != null ? roomStatCounter.get(9) > 0: false);
+            currentFlat.setKitchen(roomStatCounter.get(3) != null ? roomStatCounter.get(3) > 0: false);
+            currentFlat.setTrash(roomStatCounter.get(14) != null ? roomStatCounter.get(14) > 0: false);
+            result.add(currentFlat);
+        }
+        return result;
+    }
 }
+
+
+//data class Flat(
+//        val id: Int = 0,
+//        val id_floor: Int = 0,
+//        @SerializedName("apartment_number")
+//        val appNumber: Int = 0,
+//        val coordinates: String? = null,
+//        val sockets: Int = 0,
+//        val switches: Int = 0,
+//        val toilet: Boolean = false,
+//        val sink: Boolean = false,
+//        val bath: Boolean = false,
+//        @SerializedName("floor_finishing")
+//        val floorFinish: Int = 0,
+//        @SerializedName("draft_floor_department")
+//        val floorRough: Int = 0,
+//        @SerializedName("ceiling_finishing")
+//        val ceilingFinish: Int = 0,
+//        @SerializedName("draft_ceiling_finish")
+//        val ceilingRough: Int = 0,
+//        @SerializedName("wall_finishing")
+//        val wallFinish: Int = 0,
+//        @SerializedName("draft_wall_finish")
+//        val wallRough: Int = 0,
+//        val windowsill: Int = 0,
+//        val kitchen: Boolean = false,
+//        val slopes: Int = 0,
+//        val doors: Int = 0,
+//        @SerializedName("wall_plaster")
+//        val wallPlaster: Int = 0,
+//        val trash: Boolean = false,
+//        val radiator: Int = 0,
+//        @SerializedName("floor_plaster")
+//        val floorPlaster: Int = 0,
+//        @SerializedName("ceiling_plaster")
+//        val ceilingPlaster: Int = 0,
+//        val windows: Int = 0
