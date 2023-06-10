@@ -19,14 +19,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
@@ -47,6 +50,7 @@ import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
+import ru.mrmarvel.camoletapp.ui.NavigationDrawer
 import ru.mrmarvel.camoletapp.util.DistanceCounter
 import ru.mrmarvel.camoletapp.videoframe.VideoFrame
 
@@ -56,9 +60,12 @@ fun ObserveStartScreen(
     cameraScreenViewModel: CameraScreenViewModel,
     sharedViewModel: SharedViewModel,
     navigateToCameraScreen: () -> Unit = {},
-    navigateBack: () -> Unit = {}
+    navigateBack: () -> Unit = {},
+    navigateToHelpScreen: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
     val onLocationChange = LocationListener { location: Location ->
         Log.d("MYDEBUG", location.hasAltitude().toString())
         Log.d("MYDEBUG", location.altitude.toString())
@@ -120,7 +127,16 @@ fun ObserveStartScreen(
                     }
                 )
             }
-        }
+        },
+        drawerContent = {
+            NavigationDrawer(
+                scaffoldState = scaffoldState,
+                navigateToMonitoringScreen = navigateBack,
+                navigateToHelpScreen = navigateToHelpScreen
+            )
+        },
+        drawerBackgroundColor = Color.Transparent,
+        drawerElevation = 0.dp
     ) { scaffoldPadding ->
         Surface(
             Modifier.padding(scaffoldPadding),

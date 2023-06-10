@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,17 +22,20 @@ import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel
 import ru.mrmarvel.camoletapp.data.SharedViewModel
 import ru.mrmarvel.camoletapp.infofield.InfoField
-import ru.mrmarvel.camoletapp.util.StatCounter
+import ru.mrmarvel.camoletapp.ui.NavigationDrawer
 import ru.mrmarvel.camoletapp.videoframe.VideoFrame
 
 @Composable
 fun ObserveResultScreen(
     cameraScreenViewModel: CameraScreenViewModel,
     sharedViewModel: SharedViewModel = SharedViewModel(),
-    navigateToMonitoringScreen: () -> Unit
+    navigateToMonitoringScreen: () -> Unit,
+    navigateToHelpScreen: () -> Unit = {}
 ) {
     // var monitoringItems = listOf<MonitoringBuildingGroup>(MonitoringBuildingGroupProvider.monitoringItems[0])
     val context = LocalContext.current
+    val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             CamoletAppBar(Modifier.fillMaxWidth(),
@@ -86,7 +92,16 @@ fun ObserveResultScreen(
                     }
                 )
             }
-        }
+        },
+        drawerContent = {
+            NavigationDrawer(
+                scaffoldState = scaffoldState,
+                navigateToMonitoringScreen = navigateToMonitoringScreen,
+                navigateToHelpScreen = navigateToHelpScreen
+            )
+        },
+        drawerBackgroundColor = Color.Transparent,
+        drawerElevation = 0.dp
     ) { scaffoldPadding ->
         Surface(
             Modifier.padding(scaffoldPadding),

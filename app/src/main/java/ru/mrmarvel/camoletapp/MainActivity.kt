@@ -16,7 +16,6 @@
 
 package ru.mrmarvel.camoletapp
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -134,6 +133,9 @@ class MainActivity : ComponentActivity() {
                                 },
                                 navigateBack = {
                                     navController.popBackStack()
+                                },
+                                navigateToHelpScreen = {
+                                    navController.navigate("help_screen")
                                 }
                             )
                         }
@@ -143,7 +145,11 @@ class MainActivity : ComponentActivity() {
                                 sharedViewModel = sharedViewModel,
                                 navigateToMonitoringScreen = {
                                     navController.navigate("monitoring_screen")
-                                })
+                                },
+                                navigateToHelpScreen = {
+                                    navController.navigate("help_screen")
+                                }
+                            )
                         }
                         composable("profile_screen") {
                             ProfileScreen(
