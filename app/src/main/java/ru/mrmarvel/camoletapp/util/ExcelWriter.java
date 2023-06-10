@@ -96,7 +96,7 @@ public class ExcelWriter {
             Cell cell = row.getCell(4);
             cell.setCellValue(data[i]);
         }
-        saveWorkbook("report.xlsx", this.report);
+        saveWorkbook("СКОР_КАРТА.xlsx", this.report);
     }
 
     public static void applyDataBars(SheetConditionalFormatting sheetCF, String region, ExtendedColor colorPos) {

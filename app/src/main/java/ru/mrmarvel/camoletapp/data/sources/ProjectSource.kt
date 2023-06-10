@@ -206,7 +206,7 @@ class ProjectSource {
     suspend fun putChessReport(houseNumber: Int) {
         val f = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                .toString() + "/temp.xlsx"
+                .toString() + "/ШАХМАТКИ.xlsx"
         )
         val client = OkHttpClient()
         val formBody: RequestBody = MultipartBody.Builder()

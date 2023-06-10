@@ -68,7 +68,7 @@ fun ObserveResultScreen(
                     onItemClicked = {
                         Log.d("MYDEBUG", "СЧИТАЕМ")
 //                        val excelWriter = ExcelWriter()
-//                        excelWriter.fillSheet(Percentage.FLOOR_ROUGH, 2,2, 0.5f)
+                        sharedViewModel.statCounter.fillScoreMap(context, sharedViewModel, cameraScreenViewModel)
                         Toast.makeText(context, "Таблица скачана в папку загрузок!", Toast.LENGTH_SHORT).show()
                     }
                 )
@@ -100,7 +100,7 @@ fun ObserveResultScreen(
 //                            17
 //                        )
                         sharedViewModel.statCounter.excelWriter.
-                        saveWorkbook("temp.xlsx", sharedViewModel.statCounter.excelWriter.workbook)
+                        saveWorkbook("ШАХМАТКИ.xlsx", sharedViewModel.statCounter.excelWriter.workbook)
 
                         // TODO: Отправлять в бд поэтажно
                         CoroutineScope(Dispatchers.IO).launch {
