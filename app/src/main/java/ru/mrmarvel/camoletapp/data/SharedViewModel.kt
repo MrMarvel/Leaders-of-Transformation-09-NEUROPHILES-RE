@@ -40,10 +40,10 @@ class SharedViewModel: ViewModel() {
     val openedGroups: SnapshotStateList<MonitoringBuildingGroup> = mutableStateListOf()
     val projectRepository = ProjectRepository(ProjectSource())
 
-    val selectedProjectName = mutableStateOf("")
-    val selectedBuildingName = mutableStateOf("")
-    val selectedSectionNumber = mutableStateOf("")
-    val selectedFloorNumber = mutableStateOf("")
+    val selectedProjectName = mutableStateOf("Мытищи парк")
+    val selectedBuildingName = mutableStateOf("1")
+    val selectedSectionNumber = mutableStateOf("1")
+    val selectedFloorNumber = mutableStateOf("2")
     val observeRoomCount = mutableStateOf(0)
     val observeMOPCount = mutableStateOf(0)
 

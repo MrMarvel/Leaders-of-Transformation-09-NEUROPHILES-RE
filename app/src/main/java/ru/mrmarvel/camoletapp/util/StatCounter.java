@@ -298,8 +298,6 @@ public class StatCounter {
             result[25] = mopCounter.get(21) / mCeilingCounter;
             result[26] = mopCounter.get(1) / mCeilingCounter;
         }
-        excelWriter.readWorkbook(context);
-        excelWriter.fillReport(result);
 
         // FILL CHESS THINGY
 
@@ -308,7 +306,6 @@ public class StatCounter {
         // if independent sheets for MOP and FLAT
         int a = 0;
         for (int i = 0; i < 27; i++) {
-            Log.d("MYDEBUG", String.valueOf(i));
             if (i == 19)
                 a = 0;
             excelWriter.fillSheet(Percentage.values()[i], floor, section, maxFloor, result[i]);
