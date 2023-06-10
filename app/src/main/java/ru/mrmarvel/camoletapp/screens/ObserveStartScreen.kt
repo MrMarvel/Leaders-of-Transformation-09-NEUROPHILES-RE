@@ -255,23 +255,27 @@ public fun registerLocation(context: Context, locationListener: LocationListener
         catch(e: Exception) {}
     } else {
         try {
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
                     5000,
                     5f,
                     locationListener
                 )
+                Log.d("MYDEBUG", "GPS_PROVIDER")
+            }
         }
         catch(e: Exception) {}
         try {
-            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 locationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER,
                     5000,
                     10f,
                     locationListener
                 )
+                Log.d("MYDEBUG", "NETWORK_PROVIDER")
+            }
         }
         catch(e: Exception) {}
     }
