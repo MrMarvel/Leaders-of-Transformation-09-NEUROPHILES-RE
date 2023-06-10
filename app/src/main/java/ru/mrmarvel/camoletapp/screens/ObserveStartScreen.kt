@@ -61,7 +61,8 @@ fun ObserveStartScreen(
     sharedViewModel: SharedViewModel,
     navigateToCameraScreen: () -> Unit = {},
     navigateBack: () -> Unit = {},
-    navigateToHelpScreen: () -> Unit = {}
+    navigateToHelpScreen: () -> Unit = {},
+    navigateToProfileScreen: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
@@ -102,9 +103,13 @@ fun ObserveStartScreen(
         topBar = {
             CamoletAppBar(Modifier.fillMaxWidth(),
                 onBurgerClick = {
+                    coroutineScope.launch {
+                        scaffoldState.drawerState.open()
+                    }
                     // Toast.makeText(context, "Открыть меню!", Toast.LENGTH_SHORT).show()
                 },
                 onProfileClick = {
+                    navigateToProfileScreen()
                     // Toast.makeText(context, "Открыть профиль!", Toast.LENGTH_SHORT).show()
                 },
                 appBarText = "НАЧАЛО ОБХОДА"
@@ -128,6 +133,7 @@ fun ObserveStartScreen(
                 )
             }
         },
+        scaffoldState = scaffoldState,
         drawerContent = {
             NavigationDrawer(
                 scaffoldState = scaffoldState,

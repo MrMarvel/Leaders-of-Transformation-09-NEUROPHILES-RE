@@ -136,7 +136,10 @@ class MainActivity : ComponentActivity() {
                                 },
                                 navigateToHelpScreen = {
                                     navController.navigate("help_screen")
-                                }
+                                },
+                                navigateToProfileScreen = {
+                                    navController.navigate("profile_screen")
+                                },
                             )
                         }
                         composable("observe_result_screen") {
@@ -148,7 +151,10 @@ class MainActivity : ComponentActivity() {
                                 },
                                 navigateToHelpScreen = {
                                     navController.navigate("help_screen")
-                                }
+                                },
+                                navigateToProfileScreen = {
+                                    navController.navigate("profile_screen")
+                                },
                             )
                         }
                         composable("profile_screen") {

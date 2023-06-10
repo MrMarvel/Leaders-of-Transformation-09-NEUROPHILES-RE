@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import ru.mrmarvel.camoletapp.backbutton.BackButton
 import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
@@ -30,7 +31,8 @@ fun ObserveResultScreen(
     cameraScreenViewModel: CameraScreenViewModel,
     sharedViewModel: SharedViewModel = SharedViewModel(),
     navigateToMonitoringScreen: () -> Unit,
-    navigateToHelpScreen: () -> Unit = {}
+    navigateToHelpScreen: () -> Unit = {},
+    navigateToProfileScreen: () -> Unit = {}
 ) {
     // var monitoringItems = listOf<MonitoringBuildingGroup>(MonitoringBuildingGroupProvider.monitoringItems[0])
     val context = LocalContext.current
@@ -40,9 +42,13 @@ fun ObserveResultScreen(
         topBar = {
             CamoletAppBar(Modifier.fillMaxWidth(),
                 onBurgerClick = {
+                    coroutineScope.launch {
+                        scaffoldState.drawerState.open()
+                    }
                     // Toast.makeText(context, "Открыть меню!", Toast.LENGTH_SHORT).show()
                 },
                 onProfileClick = {
+                    navigateToProfileScreen()
                     // Toast.makeText(context, "Открыть профиль!", Toast.LENGTH_SHORT).show()
                 },
                 appBarText = "РЕЗУЛЬТАТ ОБХОДА"
@@ -93,6 +99,7 @@ fun ObserveResultScreen(
                 )
             }
         },
+        scaffoldState = scaffoldState,
         drawerContent = {
             NavigationDrawer(
                 scaffoldState = scaffoldState,
