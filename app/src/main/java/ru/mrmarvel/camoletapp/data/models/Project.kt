@@ -31,41 +31,41 @@ data class Floor(
 )
 
 data class Flat(
-    val id: Int = 0,
-    val id_floor: Int = 0,
+    var id: Int = 0,
+    var id_floor: Int = 0,
     @SerializedName("apartment_number")
-    val appNumber: Int = 0,
-    val coordinates: String? = null,
-    val sockets: Int = 0,
-    val switches: Int = 0,
-    val toilet: Boolean = false,
-    val sink: Boolean = false,
-    val bath: Boolean = false,
+    var appNumber: Int = 0,
+    var coordinates: String? = null,
+    var sockets: Int = 0,
+    var switches: Int = 0,
+    var toilet: Boolean = false,
+    var sink: Boolean = false,
+    var bath: Boolean = false,
     @SerializedName("floor_finishing")
-    val floorFinish: Int = 0,
+    var floorFinish: Float = 0.0f,
     @SerializedName("draft_floor_department")
-    val floorRough: Int = 0,
+    var floorRough: Float = 0.0f,
     @SerializedName("ceiling_finishing")
-    val ceilingFinish: Int = 0,
+    var ceilingFinish: Float = 0.0f,
     @SerializedName("draft_ceiling_finish")
-    val ceilingRough: Int = 0,
+    var ceilingRough: Float = 0.0f,
     @SerializedName("wall_finishing")
-    val wallFinish: Int = 0,
+    var wallFinish: Float = 0.0f,
     @SerializedName("draft_wall_finish")
-    val wallRough: Int = 0,
-    val windowsill: Int = 0,
-    val kitchen: Boolean = false,
-    val slopes: Int = 0,
-    val doors: Int = 0,
+    var wallRough: Float = 0.0f,
+    var windowsill: Float = 0.0f,
+    var kitchen: Boolean = false,
+    var slopes: Float = 0.0f,
+    var doors: Float = 0.0f,
     @SerializedName("wall_plaster")
-    val wallPlaster: Int = 0,
-    val trash: Boolean = false,
-    val radiator: Int = 0,
+    var wallPlaster: Float = 0.0f,
+    var trash: Boolean = false,
+    var radiator: Float = 0.0f,
     @SerializedName("floor_plaster")
-    val floorPlaster: Int = 0,
+    var floorPlaster: Float = 0.0f,
     @SerializedName("ceiling_plaster")
-    val ceilingPlaster: Int = 0,
-    val windows: Int = 0
+    var ceilingPlaster: Float = 0.0f,
+    var windows: Int = 0,
 )
 
 data class ResultNearestObject(

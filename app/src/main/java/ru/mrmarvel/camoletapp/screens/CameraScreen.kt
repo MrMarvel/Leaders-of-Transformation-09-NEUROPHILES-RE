@@ -56,6 +56,7 @@ import ru.mrmarvel.camoletapp.ui.MOPFragment
 import ru.mrmarvel.camoletapp.ui.RoomFragment
 import ru.mrmarvel.camoletapp.ui.TopLeftBar
 import ru.mrmarvel.camoletapp.util.DistanceCounter
+import ru.mrmarvel.camoletapp.util.StatCounter
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -210,6 +211,9 @@ fun CameraScreen(
             lifecycleOwner.lifecycle.addObserver(observer)
             onDispose {
                 Log.d("MYDEBUG", "DISPOSESTOP")
+                var statCounter = StatCounter()
+                var res = statCounter.calculateFlatsStatistics(cameraViewModel)
+                Log.d("TESTDEB",res.toString())
                 lifecycleOwner.lifecycle.removeObserver(observer)
             }
         }
