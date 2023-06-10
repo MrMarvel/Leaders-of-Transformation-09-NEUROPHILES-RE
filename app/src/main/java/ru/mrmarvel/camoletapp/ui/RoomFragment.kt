@@ -212,6 +212,7 @@ fun RoomFragment(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
                 cameraViewModel.flatStatistic = FlatStatistic()
+                cameraViewModel.flatStatistic.flatId = cameraViewModel.currentFlat.id
                 Log.d("MYDEBUG", "START")
             } else if (event == Lifecycle.Event.ON_STOP) {
                 Log.d("MYDEBUG", "LIFESTOP")
@@ -244,7 +245,7 @@ fun RoomFragment(
                 isFloorStatSaved.value = true
                 cameraViewModel.floorFlatStatistic.add(cameraViewModel.flatStatistic)
             }
-            Log.d("MYDEBUG", cameraViewModel.floorFlatStatistic.size.toString())
+            Log.d("MYDEBUG", cameraViewModel.flatStatistic.toString())
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }

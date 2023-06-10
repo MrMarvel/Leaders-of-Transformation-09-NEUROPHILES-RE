@@ -31,41 +31,37 @@ data class Floor(
 )
 
 data class Flat(
-    val id: Int,
-    val id_floor: Int,
-    @SerializedName("apartment_number")
-    val appNumber: Int,
-    val coordinates: String?,
-    val sockets: Int,
-    val switches: Int,
-    val toilet: Boolean,
-    val sink: Boolean,
-    val bath: Boolean,
-    @SerializedName("floor_finishing")
-    val floorFinish: Int,
-    @SerializedName("draft_floor_department")
-    val floorRough: Int,
-    @SerializedName("ceiling_finishing")
-    val ceilingFinish: Int,
-    @SerializedName("draft_ceiling_finish")
-    val ceilingRough: Int,
-    @SerializedName("wall_finishing")
-    val wallFinish: Int,
-    @SerializedName("draft_wall_finish")
-    val wallRough: Int,
-    val windowsill: Int,
-    val kitchen: Boolean,
-    val slopes: Int,
-    val doors: Int,
-    @SerializedName("wall_plaster")
-    val wallPlaster: Int,
-    val trash: Boolean,
-    val radiator: Int
+    var id: Int = 0,
+    var id_floor: Int = 0,
+    var apartment_number: Int = 0,
+    var coordinates: String? = null,
+    var sockets: Int = 0,
+    var switches: Int = 0,
+    var toilet: Int = 0,
+    var sink: Int = 0,
+    var bath: Int = 0,
+    var floor_finishing: Int = 0,
+    var draft_floor_department: Int = 0,
+    var ceiling_finishing: Int = 0,
+    var draft_ceiling_finish: Int = 0,
+    var wall_finishing: Int = 0,
+    var draft_wall_finish: Int = 0,
+    var windowsill: Int = 0,
+    var kitchen: Int = 0,
+    var slopes: Int = 0,
+    var doors: Int = 0,
+    var wall_plaster: Int = 0,
+    var trash: Int = 0,
+    var radiator: Int = 0,
+    var floor_plaster: Int = 0,
+    var ceiling_plaster: Int = 0,
+    var windows: Int = 0,
 )
 
 data class ResultNearestObject(
     var project: Project? = null,
     var house: House? = null,
     var section: Section? = null,
-    var floor: Floor? = null
+    var floor: Floor? = null,
+    var flatsList: List<Flat> = listOf()
 )

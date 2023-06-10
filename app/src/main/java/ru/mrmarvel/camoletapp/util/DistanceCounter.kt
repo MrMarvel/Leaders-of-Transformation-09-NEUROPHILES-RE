@@ -4,6 +4,7 @@ import android.location.Location
 import android.util.Log
 import androidx.compose.ui.unit.min
 import ru.mrmarvel.camoletapp.data.SharedViewModel
+import ru.mrmarvel.camoletapp.data.models.Flat
 import ru.mrmarvel.camoletapp.data.models.Floor
 import ru.mrmarvel.camoletapp.data.models.House
 import ru.mrmarvel.camoletapp.data.models.Project
@@ -84,9 +85,32 @@ class DistanceCounter {
         // ППОТОМУ ЧТО В БД НЕ ВСЕ КООРДИНАТЫ ЕСТЬ
         if (sections.size > 0) resultObject.section = sections[0]
         else return resultObject
-
         resultObject.floor = currSource.getFloorByIdSection(listOf(resultObject.section!!.id))[0]
 
+        resultObject.flatsList = currSource.getAllFlatsOnFloor(resultObject.floor!!.id)
+
         return resultObject
+    }
+
+    fun getNearestFlat(flats: List<Flat>, currentLocation: Location?): Flat {
+        var minDist: Double = Double.MAX_VALUE
+        var nearestFlat: Flat = Flat()
+
+        if (currentLocation == null) return nearestFlat
+
+        Log.d("MYDEBUG", "GETTING NEAREST FLAT")
+        for (flat in flats){
+            if (flat.coordinates == null) continue
+            val projLocation = Location("")
+            val coords = split(flat.coordinates!!)
+            projLocation.latitude = coords[0]
+            projLocation.longitude = coords[1]
+            val dist = currentLocation.distanceTo(projLocation).toDouble()
+            if (dist < minDist){
+                minDist = dist
+                nearestFlat = flat
+            }
+        }
+        return nearestFlat
     }
 }
