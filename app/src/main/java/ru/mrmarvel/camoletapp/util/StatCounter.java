@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.stream.IntStream;
 
 import ru.mrmarvel.camoletapp.data.CameraScreenViewModel;
 import ru.mrmarvel.camoletapp.data.SharedViewModel;
@@ -206,33 +205,33 @@ public class StatCounter {
                     }
                 }
             }
-            currentFlat.setFloorRough((roomStatCounter.get(6) != null ? roomStatCounter.get(6) : 0) / roomCount);
-            currentFlat.setFloorPlaster((roomStatCounter.get(20) != null ? roomStatCounter.get(20): 0) / roomCount);
-            currentFlat.setFloorFinish((roomStatCounter.get(5) != null ? roomStatCounter.get(5): 0) / roomCount);
+            currentFlat.setDraft_floor_department((roomStatCounter.get(6) != null ? roomStatCounter.get(6).intValue() : 0));
+            currentFlat.setFloor_plaster((roomStatCounter.get(20) != null ? roomStatCounter.get(20).intValue(): 0));
+            currentFlat.setFloor_finishing((roomStatCounter.get(5) != null ? roomStatCounter.get(5).intValue(): 0));
 
-            currentFlat.setWallRough((roomStatCounter.get(18) != null ? roomStatCounter.get(18): 0) / roomCount);
-            currentFlat.setWallPlaster((roomStatCounter.get(17) != null ? roomStatCounter.get(17): 0) / roomCount);
-            currentFlat.setWallFinish((roomStatCounter.get(15) != null ? roomStatCounter.get(15): 0) / roomCount);
+            currentFlat.setDraft_wall_finish((roomStatCounter.get(18) != null ? roomStatCounter.get(18).intValue(): 0));
+            currentFlat.setWall_plaster((roomStatCounter.get(17) != null ? roomStatCounter.get(17).intValue(): 0));
+            currentFlat.setWall_finishing((roomStatCounter.get(15) != null ? roomStatCounter.get(15).intValue(): 0));
 
-            currentFlat.setCeilingRough((roomStatCounter.get(2) != null ? roomStatCounter.get(2): 0) / roomCount);
-            currentFlat.setCeilingPlaster((roomStatCounter.get(21) != null ? roomStatCounter.get(21): 0) / roomCount);
-            currentFlat.setCeilingFinish((roomStatCounter.get(1) != null ? roomStatCounter.get(1): 0) / roomCount);
+            currentFlat.setDraft_ceiling_finish((roomStatCounter.get(2) != null ? roomStatCounter.get(2).intValue(): 0));
+            currentFlat.setCeiling_plaster((roomStatCounter.get(21) != null ? roomStatCounter.get(21).intValue(): 0));
+            currentFlat.setCeiling_finishing((roomStatCounter.get(1) != null ? roomStatCounter.get(1).intValue(): 0));
 
-            currentFlat.setWindowsill((roomStatCounter.get(19) != null ? roomStatCounter.get(19): 0) /(roomStatCounter.get(22) != null && roomStatCounter.get(22) != 0 ? roomStatCounter.get(22) : 1));
-            currentFlat.setSlopes((roomStatCounter.get(10) != null ? roomStatCounter.get(10): 0) / (roomStatCounter.get(22) != null && roomStatCounter.get(22) != 0 ? roomStatCounter.get(22) : 1));
-            currentFlat.setRadiator((roomStatCounter.get(8) != null ? roomStatCounter.get(8): 0) / (roomStatCounter.get(22) != null && roomStatCounter.get(22) != 0 ? roomStatCounter.get(22) : 1));
+            currentFlat.setWindowsill((roomStatCounter.get(19) != null ? roomStatCounter.get(19).intValue(): 0) );
+            currentFlat.setSlopes((roomStatCounter.get(10) != null ? roomStatCounter.get(10).intValue(): 0));
+            currentFlat.setRadiator((roomStatCounter.get(8) != null ? roomStatCounter.get(8).intValue(): 0));
 
 
             currentFlat.setWindows(roomStatCounter.get(22) != null ? Math.round(roomStatCounter.get(22)): 0);
-            currentFlat.setDoors((roomStatCounter.get(4) != null ? roomStatCounter.get(4): 0) / roomCount);
+            currentFlat.setDoors((roomStatCounter.get(4) != null ? roomStatCounter.get(4).intValue(): 0));
 
             currentFlat.setSwitches(roomStatCounter.get(12) != null ? Math.round(roomStatCounter.get(12)): 0);
             currentFlat.setSockets(roomStatCounter.get(11) != null ? Math.round(roomStatCounter.get(11)): 0);
-            currentFlat.setToilet(roomStatCounter.get(11) != null ? roomStatCounter.get(11) > 0: false);
-            currentFlat.setBath(roomStatCounter.get(0) != null ? roomStatCounter.get(0) > 0: false);
-            currentFlat.setSink(roomStatCounter.get(9) != null ? roomStatCounter.get(9) > 0: false);
-            currentFlat.setKitchen(roomStatCounter.get(3) != null ? roomStatCounter.get(3) > 0: false);
-            currentFlat.setTrash(roomStatCounter.get(14) != null ? roomStatCounter.get(14) > 0: false);
+            currentFlat.setToilet(roomStatCounter.get(11) != null ? ((roomStatCounter.get(11) > 0) ? 1 : 0) : 0);
+            currentFlat.setBath(roomStatCounter.get(0) != null ? ((roomStatCounter.get(0) > 0) ? 1 : 0): 0);
+            currentFlat.setSink(roomStatCounter.get(9) != null ? ((roomStatCounter.get(9) > 0) ? 1 : 0): 0);
+            currentFlat.setKitchen(roomStatCounter.get(3) != null ? ((roomStatCounter.get(3) > 0) ? 1 : 0): 0);
+            currentFlat.setTrash(roomStatCounter.get(14) != null ? ((roomStatCounter.get(14) > 0) ? 1 : 0): 0);
             result.add(currentFlat);
         }
         return result;

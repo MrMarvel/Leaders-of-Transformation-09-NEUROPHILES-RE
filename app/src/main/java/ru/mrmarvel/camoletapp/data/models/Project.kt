@@ -33,38 +33,28 @@ data class Floor(
 data class Flat(
     var id: Int = 0,
     var id_floor: Int = 0,
-    @SerializedName("apartment_number")
-    var appNumber: Int = 0,
+    var apartment_number: Int = 0,
     var coordinates: String? = null,
     var sockets: Int = 0,
     var switches: Int = 0,
-    var toilet: Boolean = false,
-    var sink: Boolean = false,
-    var bath: Boolean = false,
-    @SerializedName("floor_finishing")
-    var floorFinish: Float = 0.0f,
-    @SerializedName("draft_floor_department")
-    var floorRough: Float = 0.0f,
-    @SerializedName("ceiling_finishing")
-    var ceilingFinish: Float = 0.0f,
-    @SerializedName("draft_ceiling_finish")
-    var ceilingRough: Float = 0.0f,
-    @SerializedName("wall_finishing")
-    var wallFinish: Float = 0.0f,
-    @SerializedName("draft_wall_finish")
-    var wallRough: Float = 0.0f,
-    var windowsill: Float = 0.0f,
-    var kitchen: Boolean = false,
-    var slopes: Float = 0.0f,
-    var doors: Float = 0.0f,
-    @SerializedName("wall_plaster")
-    var wallPlaster: Float = 0.0f,
-    var trash: Boolean = false,
-    var radiator: Float = 0.0f,
-    @SerializedName("floor_plaster")
-    var floorPlaster: Float = 0.0f,
-    @SerializedName("ceiling_plaster")
-    var ceilingPlaster: Float = 0.0f,
+    var toilet: Int = 0,
+    var sink: Int = 0,
+    var bath: Int = 0,
+    var floor_finishing: Int = 0,
+    var draft_floor_department: Int = 0,
+    var ceiling_finishing: Int = 0,
+    var draft_ceiling_finish: Int = 0,
+    var wall_finishing: Int = 0,
+    var draft_wall_finish: Int = 0,
+    var windowsill: Int = 0,
+    var kitchen: Int = 0,
+    var slopes: Int = 0,
+    var doors: Int = 0,
+    var wall_plaster: Int = 0,
+    var trash: Int = 0,
+    var radiator: Int = 0,
+    var floor_plaster: Int = 0,
+    var ceiling_plaster: Int = 0,
     var windows: Int = 0,
 )
 

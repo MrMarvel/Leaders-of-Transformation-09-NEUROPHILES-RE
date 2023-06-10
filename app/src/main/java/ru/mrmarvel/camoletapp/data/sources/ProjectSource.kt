@@ -183,11 +183,16 @@ class ProjectSource {
         try {
             val client = OkHttpClient()
             for (flat in flats){
+                val str = flat.toString().indexOf("sockets=")
+                val strSQL = flat.toString().subSequence(str, flat.toString().lastIndex).toString()
+                Log.d("MYDEBUG", strSQL)
+                Log.d("MYDEBUG", flat.id.toString())
                 val queryParams =
                     HttpUrl.parse("http://u1988986.isp.regruhosting.ru/rest")!!.newBuilder()
-                        .addQueryParameter("sql", "UPDATE apartments SET " +
-                                flat.toString() +
-                                "WHERE id = ${flat.id};")
+                        .addQueryParameter(
+                            "sql",
+                            "UPDATE apartments SET " + strSQL + " WHERE id = ${flat.id};"
+                        )
                 val api = Request.Builder()
                     .url(queryParams.build())
                     .get()
@@ -206,14 +211,14 @@ class ProjectSource {
     suspend fun putChess(houseNumber: Int) {
         val f = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                .toString() + "/report.xlsx"
+                .toString() + "/u.txt"
         )
         val client = OkHttpClient()
         val formBody: RequestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart(
                 "file", f.name,
-                RequestBody.create(MediaType.parse("text/plain"), f.readBytes())
+                RequestBody.create(MediaType.parse("text/plain"), f)
             )
             .addFormDataPart("token", "qwerty")
             .addFormDataPart("id_house_in_db", houseNumber.toString())

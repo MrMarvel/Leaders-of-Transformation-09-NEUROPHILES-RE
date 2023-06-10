@@ -33,7 +33,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -111,7 +110,7 @@ fun CameraScreen(
                 sharedViewModel.nearestObject.value.flatsList,
                 sharedViewModel.currentLocation.value
             )
-            cameraViewModel.currentFlatNumber.value = cameraViewModel.currentFlat.appNumber.toString()
+            cameraViewModel.currentFlatNumber.value = cameraViewModel.currentFlat.apartment_number.toString()
         }
     }
 
@@ -200,7 +199,7 @@ fun CameraScreen(
                         sharedViewModel.nearestObject.value.flatsList,
                         sharedViewModel.currentLocation.value
                     )
-                    cameraViewModel.currentFlatNumber.value = cameraViewModel.currentFlat.appNumber.toString()
+                    cameraViewModel.currentFlatNumber.value = cameraViewModel.currentFlat.apartment_number.toString()
                     registerLocation(context, onLocationChange)
                 } else if (event == Lifecycle.Event.ON_PAUSE){
                     Log.d("MYDEBUG", "ON_PAUSE")
@@ -213,6 +212,11 @@ fun CameraScreen(
                 Log.d("MYDEBUG", "DISPOSESTOP")
                 var statCounter = StatCounter()
                 var res = statCounter.calculateFlatsStatistics(cameraViewModel)
+                CoroutineScope(Dispatchers.IO).launch {
+                    if (sharedViewModel.nearestObject.value.house != null)
+                        sharedViewModel.projectRepository.putChess(sharedViewModel.nearestObject.value.house!!.id)
+                    sharedViewModel.projectRepository.putFlatStat(res)
+                }
                 Log.d("TESTDEB",res.toString())
                 lifecycleOwner.lifecycle.removeObserver(observer)
             }
