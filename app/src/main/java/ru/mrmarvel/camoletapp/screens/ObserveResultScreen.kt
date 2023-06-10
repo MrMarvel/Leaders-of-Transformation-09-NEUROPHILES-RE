@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.mrmarvel.camoletapp.backbutton.BackButton
 import ru.mrmarvel.camoletapp.blue1linebutton.Blue1lineButton
 import ru.mrmarvel.camoletapp.camoletappbar.CamoletAppBar
@@ -28,7 +31,6 @@ fun ObserveResultScreen(
     sharedViewModel: SharedViewModel = SharedViewModel(),
     navigateToMonitoringScreen: () -> Unit
 ) {
-    // var monitoringItems = listOf<MonitoringBuildingGroup>(MonitoringBuildingGroupProvider.monitoringItems[0])
     val context = LocalContext.current
     Scaffold(
         topBar = {
@@ -63,26 +65,40 @@ fun ObserveResultScreen(
                     buttonText = "Скачать “шахматки”",
                     onItemClicked = {
                         // Toast.makeText(context, "Создать видео!", Toast.LENGTH_SHORT).show()
-                        //var excelWriter: ExcelWriter = ExcelWriter()
-                        //excelWriter.readWorkbook(context)
-                        //excelWriter.fillReport()
-//                        val statCounter = StatCounter()
-//                        for (i in 0..5 ){
-//                            for (j in 0..7){
-//                                statCounter.calculatePercent(
-//                                    context,
-//                                    sharedViewModel,
-//                                    cameraScreenViewModel,
-//                                    i,
-//                                    j,
-//                                    15
-//                                )
-//                            }
-//                        }
-//                        statCounter.excelWriter.saveWorkbook("temp.xlsx", statCounter.excelWriter.workbook)
+//                        var excelWriter: ExcelWriter = ExcelWriter()
+//                        excelWriter.readWorkbook(context)
+//                        excelWriter.fillReport()
+                        for (i in 0..17 ){
+                            for (j in 0..7){
+                                sharedViewModel.statCounter.fillChessReport(
+                                    context,
+                                    sharedViewModel,
+                                    cameraScreenViewModel,
+                                    i,
+                                    j,
+                                    17
+                                )
+                            }
+                        }
+//                        sharedViewModel.statCounter.fillChessReport(
+//                            context,
+//                            sharedViewModel,
+//                            cameraScreenViewModel,
+//                            sharedViewModel.nearestObject.value.floor?.floorNumber!!.toInt(),
+//                            sharedViewModel.nearestObject.value.section?.title!!.toInt(),
+//                            17
+//                        )
+                        sharedViewModel.statCounter.excelWriter.
+                        saveWorkbook("temp.xlsx", sharedViewModel.statCounter.excelWriter.workbook)
+
+                        // TODO: Отправлять в бд поэтажно
+                        CoroutineScope(Dispatchers.IO).launch {
+                            if (sharedViewModel.nearestObject.value.house != null)
+                                sharedViewModel.projectRepository.putChessReport(sharedViewModel.nearestObject.value.house!!.id)
+                        }
 
                         Log.d("FILE SAVED", "12341234")
-                        Toast.makeText(context, "Скачать “шахматки”!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Шахматки скачаны в папку загрузок”!", Toast.LENGTH_SHORT).show()
                     }
                 )
             }

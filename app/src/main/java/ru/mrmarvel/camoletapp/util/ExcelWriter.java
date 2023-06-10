@@ -135,7 +135,6 @@ public class ExcelWriter {
         // CHECK IF SHEET EXISTS
         String sheetN = PercentageEnumToString.get(sheetName);
         XSSFSheet currentSheet = this.workbook.getSheet(sheetN);
-        Log.d("MYDEBUG", "START");
         ExtendedColor colorPos = this.workbook.getCreationHelper().createExtendedColor();
         colorPos.setARGBHex("FF638EC6");
         if (currentSheet == null) {
@@ -146,13 +145,11 @@ public class ExcelWriter {
             SheetConditionalFormatting sheetCF = currentSheet.getSheetConditionalFormatting();
             applyDataBars(sheetCF, String.format("B2:W%s", maxFloor + 2), colorPos);
         }
-        Log.d("MYDEBUG", "FIRST IF");
         // FILL CURRENT
         Row row = currentSheet.getRow(numFloor);
         if (row == null){
             row = currentSheet.createRow(numFloor);
         }
-        Log.d("MYDEBUG", "SECOND IF");
         Cell floorCell =  row.createCell(0);
         floorCell.setCellValue(floor);
 
@@ -164,10 +161,8 @@ public class ExcelWriter {
         if (sectionRow == null){
             sectionRow = currentSheet.createRow(maxFloor + 2);
         }
-        Log.d("MYDEBUG", "3 IF");
         Cell sectionCell =  sectionRow.createCell(numSection);
         sectionCell.setCellValue(numSection);
-        Log.d("MYDEBUG", "END");
     }
 
     public void saveWorkbook(String filename, XSSFWorkbook workbook) {

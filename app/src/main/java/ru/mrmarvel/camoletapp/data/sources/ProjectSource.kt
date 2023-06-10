@@ -1,9 +1,7 @@
 package ru.mrmarvel.camoletapp.data.sources
 
-import android.content.Context
 import android.os.Environment
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl
 import okhttp3.MediaType
@@ -11,7 +9,6 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.internal.io.FileSystem
 import org.json.JSONArray
 import ru.gildor.coroutines.okhttp.await
 import ru.mrmarvel.camoletapp.data.models.Flat
@@ -179,14 +176,12 @@ class ProjectSource {
         }
     }
 
-    suspend fun putFlatStat(flats: List<Flat>) {
+    suspend fun setFlatStatistic(flats: List<Flat>) {
         try {
             val client = OkHttpClient()
             for (flat in flats){
                 val str = flat.toString().indexOf("sockets=")
                 val strSQL = flat.toString().subSequence(str, flat.toString().lastIndex).toString()
-                Log.d("MYDEBUG", strSQL)
-                Log.d("MYDEBUG", flat.id.toString())
                 val queryParams =
                     HttpUrl.parse("http://u1988986.isp.regruhosting.ru/rest")!!.newBuilder()
                         .addQueryParameter(
@@ -208,10 +203,10 @@ class ProjectSource {
         }
     }
 
-    suspend fun putChess(houseNumber: Int) {
+    suspend fun putChessReport(houseNumber: Int) {
         val f = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                .toString() + "/u.txt"
+                .toString() + "/temp.xlsx"
         )
         val client = OkHttpClient()
         val formBody: RequestBody = MultipartBody.Builder()
@@ -224,7 +219,7 @@ class ProjectSource {
             .addFormDataPart("id_house_in_db", houseNumber.toString())
             .build()
         val request = Request.Builder()
-            .url("https://webhook.site/56c0d094-813b-4f60-a3d6-bdff1e39b0db")
+            .url("http://u1988986.isp.regruhosting.ru/upload/file")
             .post(formBody)
             .build()
 

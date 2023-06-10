@@ -134,13 +134,6 @@ fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yol
     cameraViewModel.selectedRoomType.value = null
 }
 
-//fun processRoomStatistic(cameraViewModel: CameraScreenViewModel, yolov8Ncnn: Yolov8Ncnn){
-//    val roomType = cameraViewModel.selectedRoomType.value
-//    cameraViewModel.roomRealData = yolov8Ncnn.data
-//    Log.d("MYDEBUG", cameraViewModel.roomRealData.toString())
-//
-//}
-
 @Composable
 fun RoomFragment(
     sharedViewModel: SharedViewModel,

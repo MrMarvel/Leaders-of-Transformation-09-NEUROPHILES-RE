@@ -104,7 +104,6 @@ fun CameraScreen(
     val onLocationChange = LocationListener { location: Location ->
         Log.d("MYDEBUG", location.toString())
         cameraViewModel.currentLocation.value = location
-        Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
         if (!cameraViewModel.isFlatLocked.value) {
             cameraViewModel.currentFlat = DistanceCounter().getNearestFlat(
                 sharedViewModel.nearestObject.value.flatsList,
@@ -210,14 +209,10 @@ fun CameraScreen(
             lifecycleOwner.lifecycle.addObserver(observer)
             onDispose {
                 Log.d("MYDEBUG", "DISPOSESTOP")
-                var statCounter = StatCounter()
-                var res = statCounter.calculateFlatsStatistics(cameraViewModel)
+                var res = sharedViewModel.statCounter.calculateFlatsStatistics(cameraViewModel)
                 CoroutineScope(Dispatchers.IO).launch {
-                    if (sharedViewModel.nearestObject.value.house != null)
-                        sharedViewModel.projectRepository.putChess(sharedViewModel.nearestObject.value.house!!.id)
-                    sharedViewModel.projectRepository.putFlatStat(res)
+                    sharedViewModel.projectRepository.setFlatStatistic(res)
                 }
-                Log.d("TESTDEB",res.toString())
                 lifecycleOwner.lifecycle.removeObserver(observer)
             }
         }

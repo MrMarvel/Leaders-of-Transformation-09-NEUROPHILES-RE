@@ -12,6 +12,7 @@ import ru.mrmarvel.camoletapp.data.models.ResultNearestObject
 import ru.mrmarvel.camoletapp.data.repository.ProjectRepository
 import ru.mrmarvel.camoletapp.data.sources.ProjectSource
 import ru.mrmarvel.camoletapp.screens.startingDate
+import ru.mrmarvel.camoletapp.util.StatCounter
 import java.util.Calendar
 
 
@@ -48,6 +49,8 @@ class SharedViewModel: ViewModel() {
 
     val currentLocation: MutableState<Location?> = mutableStateOf(null)
     val nearestObject: MutableState<ResultNearestObject> = mutableStateOf(ResultNearestObject())
+
+    val statCounter = StatCounter()
 
     init {
         _monitoringBuildingGroupList += MonitoringBuildingGroupProvider.monitoringItems

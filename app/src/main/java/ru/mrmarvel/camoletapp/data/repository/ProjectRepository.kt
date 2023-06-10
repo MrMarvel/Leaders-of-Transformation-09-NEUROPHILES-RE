@@ -1,6 +1,5 @@
 package ru.mrmarvel.camoletapp.data.repository
 
-import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import ru.mrmarvel.camoletapp.data.models.Flat
 import ru.mrmarvel.camoletapp.data.models.Floor
@@ -8,7 +7,6 @@ import ru.mrmarvel.camoletapp.data.models.House
 import ru.mrmarvel.camoletapp.data.models.Project
 import ru.mrmarvel.camoletapp.data.models.Section
 import ru.mrmarvel.camoletapp.data.sources.ProjectSource
-import java.io.File
 
 class ProjectRepository(private val projectSource: ProjectSource) {
     var projects = mutableStateOf(listOf<Project>())
@@ -33,11 +31,11 @@ class ProjectRepository(private val projectSource: ProjectSource) {
         return projectSource.getFlatsByIdFloor(ids)
     }
 
-    suspend fun putFlatStat(flats: List<Flat>) {
-        projectSource.putFlatStat(flats)
+    suspend fun setFlatStatistic(flats: List<Flat>) {
+        projectSource.setFlatStatistic(flats)
     }
 
-    suspend fun putChess(houseNumber: Int) {
-        projectSource.putChess(houseNumber)
+    suspend fun putChessReport(houseNumber: Int) {
+        projectSource.putChessReport(houseNumber)
     }
 }

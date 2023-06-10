@@ -60,10 +60,7 @@ fun ObserveStartScreen(
 ) {
     val context = LocalContext.current
     val onLocationChange = LocationListener { location: Location ->
-        Log.d("MYDEBUG", location.hasAltitude().toString())
-        Log.d("MYDEBUG", location.altitude.toString())
         sharedViewModel.currentLocation.value = location
-        Toast.makeText(context, "GPS:$location", Toast.LENGTH_SHORT).show()
         CoroutineScope(Dispatchers.IO).launch {
             sharedViewModel.nearestObject.value = DistanceCounter().getNearestObject(sharedViewModel)
             sharedViewModel.selectedProjectName.value = sharedViewModel.nearestObject.value.project?.title ?: ""

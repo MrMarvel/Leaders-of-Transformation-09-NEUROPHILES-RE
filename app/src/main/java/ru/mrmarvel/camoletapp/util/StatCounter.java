@@ -30,7 +30,7 @@ public class StatCounter {
     }
 
 
-    public void calculatePercent(
+    public void fillChessReport(
             Context context,
             SharedViewModel sharedViewModel,
             CameraScreenViewModel viewModel,
